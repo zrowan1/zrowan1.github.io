@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Huishouden">
+    <meta name="theme-color" content="#1B4D5C">
+    <title>Huishouden</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --dark-teal: #1B4D5C;
+            --med-teal: #2A7F8F;
+            --light-teal: #D4EEF1;
+            --very-light-teal: #EDF7F8;
+            --green: #3A8E6E;
+            --light-green: #E8F5EE;
+            --rowan-bg: #E8F0FE;
+            --rowan-text: #1A56DB;
+            --jamie-bg: #FDE8EF;
+            --jamie-text: #C41E5C;
+            --samen-bg: #F0E8FD;
+            --samen-text: #6B21A8;
+            --dark-text: #1A1A2E;
+            --med-text: #3D3D5C;
+            --light-text: #6B7280;
+            --border: #E5E7EB;
+            --white: #FFFFFF;
+            --bg: #F8FAFC;
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--dark-text);
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--dark-teal) 0%, var(--med-teal) 100%);
+            padding: calc(var(--safe-top) + 16px) 20px 20px;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 13px;
+            opacity: 0.85;
+            margin-top: 4px;
+        }
+
+        .sync-status {
+            position: absolute;
+            right: 20px;
+            top: calc(var(--safe-top) + 20px);
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0.9;
+        }
+
+        .sync-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ADE80;
+        }
+
+        .sync-dot.loading {
+            background: #FBBF24;
+            animation: pulse 1s infinite;
+        }
+
+        .sync-dot.error {
+            background: #F87171;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 14px 8px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--light-text);
+            border: none;
+            background: none;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .tab.active {
+            color: var(--med-teal);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            background: var(--med-teal);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .tab-icon {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Content */
+        .content {
+            padding: 16px;
+            padding-bottom: calc(var(--safe-bottom) + 20px);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .card-header .icon {
+            font-size: 20px;
+        }
+
+        /* Week selector */
+        .week-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .week-btn {
+            padding: 10px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: white;
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .week-btn.active {
+            background: var(--med-teal);
+            color: white;
+            border-color: var(--med-teal);
+        }
+
+        /* Person toggle */
+        .person-toggle {
+            display: flex;
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 16px;
+        }
+
+        .person-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+        }
+
+        .person-btn.rowan {
+            color: var(--rowan-text);
+        }
+
+        .person-btn.rowan.active {
+            background: var(--rowan-bg);
+        }
+
+        .person-btn.jamie {
+            color: var(--jamie-text);
+        }
+
+        .person-btn.jamie.active {
+            background: var(--jamie-bg);
+        }
+
+        /* Task lists */
+        .day-section {
+            margin-bottom: 16px;
+        }
+
+        .day-header {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--med-text);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .day-header .date {
+            font-size: 12px;
+            color: var(--light-text);
+            font-weight: 400;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--very-light-teal);
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .task-item.rowan {
+            background: var(--rowan-bg);
+        }
+
+        .task-item.jamie {
+            background: var(--jamie-bg);
+        }
+
+        .task-item .checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--med-teal);
+            border-radius: 6px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .task-item.rowan .checkbox {
+            border-color: var(--rowan-text);
+        }
+
+        .task-item.jamie .checkbox {
+            border-color: var(--jamie-text);
+        }
+
+        .task-item.done .checkbox {
+            background: var(--med-teal);
+            border-color: var(--med-teal);
+        }
+
+        .task-item.rowan.done .checkbox {
+            background: var(--rowan-text);
+            border-color: var(--rowan-text);
+        }
+
+        .task-item.jamie.done .checkbox {
+            background: var(--jamie-text);
+            border-color: var(--jamie-text);
+        }
+
+        .task-item.done .task-text {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--light-text);
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        /* Room grid for Alle Taken */
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .room-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .room-header {
+            padding: 12px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .room-tasks {
+            padding: 12px;
+            font-size: 13px;
+            color: var(--med-text);
+            line-height: 1.6;
+        }
+
+        .room-tasks li {
+            margin-left: 16px;
+            margin-bottom: 4px;
+        }
+
+        /* Cooking schedule */
+        .cook-day {
+            display: flex;
+            align-items: center;
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cook-day:last-child {
+            border-bottom: none;
+        }
+
+        .cook-day .day-name {
+            width: 90px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .cook-day .cook-name {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .cook-day .cook-name.rowan {
+            color: var(--rowan-text);
+        }
+
+        .cook-day .cook-name.jamie {
+            color: var(--jamie-text);
+        }
+
+        .cook-day .cook-name.samen {
+            color: var(--samen-text);
+        }
+
+        .cook-day .meal {
+            font-size: 13px;
+            color: var(--light-text);
+            text-align: right;
+        }
+
+        /* Settings card */
+        .settings-card {
+            background: linear-gradient(135deg, var(--light-teal) 0%, var(--very-light-teal) 100%);
+            border: 1px dashed var(--med-teal);
+        }
+
+        .settings-card input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .settings-card button {
+            width: 100%;
+            padding: 14px;
+            background: var(--med-teal);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 12px;
+            cursor: pointer;
+        }
+
+        .settings-card .help-text {
+            font-size: 12px;
+            color: var(--med-text);
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        /* Pull to refresh indicator */
+        .pull-indicator {
+            text-align: center;
+            padding: 20px;
+            color: var(--med-teal);
+            font-size: 13px;
+            display: none;
+        }
+
+        .pull-indicator.visible {
+            display: block;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--light-teal);
+            border-top-color: var(--med-teal);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Today highlight */
+        .today {
+            position: relative;
+        }
+
+        .today::before {
+            content: 'Vandaag';
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: var(--med-teal);
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🏠 Huishouden</h1>
+        <p class="subtitle">Rowan & Jamie-Lee</p>
+        <div class="sync-status">
+            <span class="sync-dot" id="syncDot"></span>
+            <span id="syncText">Gesynchroniseerd</span>
+        </div>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab active" data-tab="verdeling">
+            <span class="tab-icon">📋</span>
+            Taken
+        </button>
+        <button class="tab" data-tab="koken">
+            <span class="tab-icon">🍳</span>
+            Koken
+        </button>
+        <button class="tab" data-tab="overzicht">
+            <span class="tab-icon">🏠</span>
+            Overzicht
+        </button>
+        <button class="tab" data-tab="instellingen">
+            <span class="tab-icon">⚙️</span>
+            Setup
+        </button>
+    </nav>
+
+    <main class="content">
+        <!-- Taakverdeling Tab -->
+        <div class="tab-content active" id="verdeling">
+            <div class="week-selector" id="weekSelector"></div>
+            
+            <div class="person-toggle">
+                <button class="person-btn rowan active" data-person="rowan">👤 Rowan</button>
+                <button class="person-btn jamie" data-person="jamie">👤 Jamie-Lee</button>
+            </div>
+
+            <div id="taskList">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kookplanning Tab -->
+        <div class="tab-content" id="koken">
+            <div class="week-selector" id="cookWeekSelector"></div>
+            
+            <div class="card" id="cookList">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overzicht Tab -->
+        <div class="tab-content" id="overzicht">
+            <div class="room-grid" id="roomGrid">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instellingen Tab -->
+        <div class="tab-content" id="instellingen">
+            <div class="card settings-card">
+                <div class="card-header">
+                    <span class="icon">🔗</span>
+                    <h2>Google Sheet Koppelen</h2>
+                </div>
+                <p style="font-size: 14px; color: var(--med-text); margin-bottom: 12px;">
+                    Voer hieronder je Google Sheet ID in om de app te koppelen aan je planning.
+                </p>
+                <input type="text" id="sheetIdInput" placeholder="Google Sheet ID (bijv. 1BxiM...)" />
+                <button onclick="saveSheetId()">Opslaan & Verbinden</button>
+                <p class="help-text">
+                    📖 <strong>Hoe vind je het Sheet ID?</strong><br>
+                    Open je Google Sheet en kopieer het ID uit de URL:<br>
+                    docs.google.com/spreadsheets/d/<strong>[DIT_IS_HET_ID]</strong>/edit
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">📱</span>
+                    <h2>App Installeren</h2>
+                </div>
+                <p style="font-size: 14px; color: var(--med-text); line-height: 1.6;">
+                    <strong>Op iPhone:</strong><br>
+                    1. Tik op het deel-icoon (□↑)<br>
+                    2. Scroll naar beneden<br>
+                    3. Tik op "Zet op beginscherm"<br><br>
+                    <strong>Op Android:</strong><br>
+                    1. Tik op de drie puntjes (⋮)<br>
+                    2. Tik op "App installeren" of "Toevoegen aan startscherm"
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">📋</span>
+                    <h2>Google Sheet Setup</h2>
+                </div>
+                <p style="font-size: 14px; color: var(--med-text); line-height: 1.6;">
+                    Zorg dat je Google Sheet <strong>3 tabbladen</strong> heeft:<br><br>
+                    1️⃣ <strong>Alle taken</strong> - Kamer headers in rij 1<br>
+                    2️⃣ <strong>Taakverdeling</strong> - Weken met taken<br>
+                    3️⃣ <strong>Kookplanning</strong> - Wie kookt wanneer<br><br>
+                    ⚠️ Vergeet niet de sheet te <strong>publiceren</strong>:<br>
+                    Bestand → Delen → Publiceren op internet → CSV
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ==================== STATE ====================
+        let state = {
+            sheetId: localStorage.getItem('sheetId') || '',
+            currentTab: 'verdeling',
+            currentWeek: 0,
+            currentCookWeek: 0,
+            currentPerson: 'rowan',
+            data: {
+                tasks: JSON.parse(localStorage.getItem('tasksData') || 'null'),
+                verdeling: JSON.parse(localStorage.getItem('verdelingData') || 'null'),
+                koken: JSON.parse(localStorage.getItem('kokenData') || 'null')
+            },
+            completedTasks: JSON.parse(localStorage.getItem('completedTasks') || '{}'),
+            lastSync: localStorage.getItem('lastSync') || null
+        };
+
+        // ==================== GOOGLE SHEETS ====================
+        async function fetchSheetData(sheetName) {
+            if (!state.sheetId) return null;
+            
+            // Try multiple sheet name variations
+            const variations = [
+                sheetName,
+                `${sheetName} - Tabel 1`,
+                sheetName.replace(' - Tabel 1', '')
+            ];
+            
+            for (const name of variations) {
+                const url = `https://docs.google.com/spreadsheets/d/${state.sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(name)}`;
+                
+                try {
+                    const response = await fetch(url);
+                    if (response.ok) {
+                        const text = await response.text();
+                        if (text && !text.includes('error')) {
+                            return parseCSV(text);
+                        }
+                    }
+                } catch (error) {
+                    console.log(`Tried ${name}, not found`);
+                }
+            }
+            
+            console.error(`Could not find sheet: ${sheetName}`);
+            return null;
+        }
+
+        function parseCSV(text) {
+            const lines = text.split('\n');
+            return lines.map(line => {
+                const result = [];
+                let cell = '';
+                let inQuotes = false;
+                
+                for (let i = 0; i < line.length; i++) {
+                    const char = line[i];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        result.push(cell.trim());
+                        cell = '';
+                    } else {
+                        cell += char;
+                    }
+                }
+                result.push(cell.trim());
+                return result;
+            }).filter(row => row.some(cell => cell));
+        }
+
+        async function syncData() {
+            if (!state.sheetId) {
+                updateSyncStatus('error', 'Geen Sheet ID');
+                return;
+            }
+
+            updateSyncStatus('loading', 'Synchroniseren...');
+
+            try {
+                // Try different sheet name variations
+                const [tasks, verdeling, koken] = await Promise.all([
+                    fetchSheetData('Alle taken'),
+                    fetchSheetData('Taakverdeling'),
+                    fetchSheetData('Kookplanning')
+                ]);
+
+                if (tasks) {
+                    state.data.tasks = tasks;
+                    localStorage.setItem('tasksData', JSON.stringify(tasks));
+                }
+                if (verdeling) {
+                    state.data.verdeling = parseVerdeling(verdeling);
+                    localStorage.setItem('verdelingData', JSON.stringify(state.data.verdeling));
+                }
+                if (koken) {
+                    state.data.koken = parseKoken(koken);
+                    localStorage.setItem('kokenData', JSON.stringify(state.data.koken));
+                }
+
+                state.lastSync = new Date().toISOString();
+                localStorage.setItem('lastSync', state.lastSync);
+                
+                const successCount = [tasks, verdeling, koken].filter(Boolean).length;
+                if (successCount === 3) {
+                    updateSyncStatus('success', 'Gesynchroniseerd');
+                } else if (successCount > 0) {
+                    updateSyncStatus('success', `${successCount}/3 sheets geladen`);
+                } else {
+                    updateSyncStatus('error', 'Geen data gevonden');
+                }
+                
+                renderCurrentTab();
+            } catch (error) {
+                console.error('Sync error:', error);
+                updateSyncStatus('error', 'Sync mislukt');
+            }
+        }
+
+        function parseVerdeling(data) {
+            const weeks = [];
+            let currentWeek = null;
+            let currentPerson = null;
+            let expectingDayHeaders = false;
+            
+            const days = ['Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag', 'Zondag'];
+            
+            for (const row of data) {
+                const firstCell = (row[0] || '').toString().trim();
+                
+                // Skip title row
+                if (firstCell.includes('Taakverdeling')) continue;
+                
+                // Check for person name (with or without emoji)
+                if (firstCell.toLowerCase().includes('rowan')) {
+                    currentPerson = 'rowan';
+                    expectingDayHeaders = true;
+                    continue;
+                }
+                if (firstCell.toLowerCase().includes('jamie')) {
+                    currentPerson = 'jamie';
+                    expectingDayHeaders = true;
+                    continue;
+                }
+                
+                // Check for week range (after person name)
+                if (firstCell.includes('t/m') && currentPerson) {
+                    const weekRange = firstCell.replace(/📅\s*/g, '').trim();
+                    
+                    // Find or create week
+                    let existingWeek = weeks.find(w => w.range === weekRange);
+                    if (!existingWeek) {
+                        existingWeek = { range: weekRange, rowan: {}, jamie: {} };
+                        weeks.push(existingWeek);
+                    }
+                    currentWeek = existingWeek;
+                    expectingDayHeaders = false;
+                    continue;
+                }
+                
+                // Skip day headers row
+                if (row.includes('Maandag') && row.includes('Zondag')) {
+                    continue;
+                }
+                
+                // Task row - iterate through columns for each day
+                if (currentWeek && currentPerson) {
+                    for (let i = 1; i <= 7; i++) {
+                        const task = row[i];
+                        if (task && task.toString().trim()) {
+                            const day = days[i - 1];
+                            if (!currentWeek[currentPerson][day]) {
+                                currentWeek[currentPerson][day] = [];
+                            }
+                            currentWeek[currentPerson][day].push(task.toString().trim());
+                        }
+                    }
+                }
+            }
+            
+            return weeks;
+        }
+
+        function parseKoken(data) {
+            const weeks = [];
+            let currentWeek = null;
+            
+            for (const row of data) {
+                const firstCell = (row[0] || '').toString().trim();
+                const secondCell = (row[1] || '').toString().trim();
+                
+                // Skip main title row
+                if (firstCell.toLowerCase().includes('kookplanning') && !firstCell.includes('t/m')) continue;
+                
+                // Check for week range (can be in first cell with emoji, or plain)
+                if (firstCell.includes('t/m') || (firstCell.includes('📅') && firstCell.includes('t/m'))) {
+                    if (currentWeek && currentWeek.days.length > 0) weeks.push(currentWeek);
+                    const weekRange = firstCell.replace(/📅\s*/g, '').trim();
+                    currentWeek = { range: weekRange, days: [] };
+                    continue;
+                }
+                
+                // Skip column header rows
+                if (secondCell.toLowerCase() === 'dag') continue;
+                
+                // Day row - check if second column has a day name
+                const dayNames = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'];
+                if (secondCell && dayNames.includes(secondCell.toLowerCase()) && currentWeek) {
+                    currentWeek.days.push({
+                        day: secondCell,
+                        cook: (row[2] || '').toString().trim(),
+                        meal: (row[3] || '').toString().trim()
+                    });
+                }
+            }
+            
+            if (currentWeek && currentWeek.days.length > 0) weeks.push(currentWeek);
+            return weeks;
+        }
+
+        function updateSyncStatus(status, text) {
+            const dot = document.getElementById('syncDot');
+            const textEl = document.getElementById('syncText');
+            
+            dot.className = 'sync-dot';
+            if (status === 'loading') dot.classList.add('loading');
+            if (status === 'error') dot.classList.add('error');
+            
+            textEl.textContent = text;
+        }
+
+        // ==================== RENDERING ====================
+        function renderCurrentTab() {
+            switch (state.currentTab) {
+                case 'verdeling': renderVerdeling(); break;
+                case 'koken': renderKoken(); break;
+                case 'overzicht': renderOverzicht(); break;
+            }
+        }
+
+        function renderVerdeling() {
+            const container = document.getElementById('taskList');
+            const weekSelector = document.getElementById('weekSelector');
+            
+            if (!state.data.verdeling || state.data.verdeling.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📋</div>
+                        <p>Geen taken gevonden.<br>Koppel eerst je Google Sheet.</p>
+                    </div>
+                `;
+                weekSelector.innerHTML = '';
+                return;
+            }
+
+            // Render week selector
+            weekSelector.innerHTML = state.data.verdeling.map((week, i) => `
+                <button class="week-btn ${i === state.currentWeek ? 'active' : ''}" 
+                        onclick="selectWeek(${i})">
+                    ${week.range}
+                </button>
+            `).join('');
+
+            const week = state.data.verdeling[state.currentWeek];
+            const personTasks = week[state.currentPerson] || {};
+            const days = ['Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag', 'Zondag'];
+            const today = new Date().toLocaleDateString('nl-NL', { weekday: 'long' });
+            
+            let html = '';
+            
+            for (const day of days) {
+                const tasks = personTasks[day] || [];
+                const isToday = day.toLowerCase() === today.toLowerCase();
+                
+                html += `
+                    <div class="day-section ${isToday ? 'today' : ''}">
+                        <div class="day-header">${day}</div>
+                        <div class="task-list">
+                `;
+                
+                if (tasks.length === 0) {
+                    html += `<div class="task-item ${state.currentPerson}" style="opacity: 0.5; font-style: italic;">Geen taken</div>`;
+                } else {
+                    for (const task of tasks) {
+                        const taskId = `${week.range}-${state.currentPerson}-${day}-${task}`;
+                        const isDone = state.completedTasks[taskId];
+                        
+                        html += `
+                            <div class="task-item ${state.currentPerson} ${isDone ? 'done' : ''}" 
+                                 onclick="toggleTask('${taskId}')">
+                                <div class="checkbox">${isDone ? '✓' : ''}</div>
+                                <span class="task-text">${task}</span>
+                            </div>
+                        `;
+                    }
+                }
+                
+                html += '</div></div>';
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function renderKoken() {
+            const container = document.getElementById('cookList');
+            const weekSelector = document.getElementById('cookWeekSelector');
+            
+            if (!state.data.koken || state.data.koken.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">🍳</div>
+                        <p>Geen kookplanning gevonden.<br>Koppel eerst je Google Sheet.</p>
+                    </div>
+                `;
+                weekSelector.innerHTML = '';
+                return;
+            }
+
+            weekSelector.innerHTML = state.data.koken.map((week, i) => `
+                <button class="week-btn ${i === state.currentCookWeek ? 'active' : ''}" 
+                        onclick="selectCookWeek(${i})">
+                    ${week.range}
+                </button>
+            `).join('');
+
+            const week = state.data.koken[state.currentCookWeek];
+            const today = new Date().toLocaleDateString('nl-NL', { weekday: 'long' });
+            
+            container.innerHTML = week.days.map(d => {
+                const cookClass = d.cook.toLowerCase().includes('rowan') ? 'rowan' :
+                                  d.cook.toLowerCase().includes('jamie') ? 'jamie' :
+                                  d.cook.toLowerCase().includes('samen') ? 'samen' : '';
+                const isToday = d.day.toLowerCase() === today.toLowerCase();
+                
+                return `
+                    <div class="cook-day ${isToday ? 'today' : ''}">
+                        <span class="day-name">${d.day}</span>
+                        <span class="cook-name ${cookClass}">${d.cook || '—'}</span>
+                        <span class="meal">${d.meal || ''}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderOverzicht() {
+            const container = document.getElementById('roomGrid');
+            
+            if (!state.data.tasks || state.data.tasks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="icon">🏠</div>
+                        <p>Geen taken overzicht gevonden.<br>Koppel eerst je Google Sheet.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const colors = [
+                '#2A7F8F', '#3A8E6E', '#5C8A4D', '#8B7355',
+                '#7B6B8A', '#6B7FAA', '#4A8B8B', '#7A7A5A',
+                '#6E8B74', '#8B6B6B'
+            ];
+
+            // Find the header row (first row that has multiple columns filled, skip title)
+            let headerRowIndex = 0;
+            for (let i = 0; i < state.data.tasks.length; i++) {
+                const row = state.data.tasks[i];
+                const filledCells = row.filter(cell => cell && cell.toString().trim()).length;
+                // Skip rows with only 1 filled cell (title rows) or that contain emoji titles
+                if (filledCells > 2 && !row[0]?.toString().includes('🏠')) {
+                    headerRowIndex = i;
+                    break;
+                }
+            }
+
+            const headers = state.data.tasks[headerRowIndex];
+            const tasks = state.data.tasks.slice(headerRowIndex + 1);
+            
+            container.innerHTML = headers.map((room, colIndex) => {
+                if (!room || room.toString().includes('🏠')) return '';
+                
+                const roomTasks = tasks
+                    .map(row => row[colIndex])
+                    .filter(task => task && task.toString().trim());
+                
+                return `
+                    <div class="room-card">
+                        <div class="room-header" style="background: ${colors[colIndex % colors.length]}">
+                            ${room}
+                        </div>
+                        <ul class="room-tasks">
+                            ${roomTasks.map(t => `<li>${t}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ==================== EVENT HANDLERS ====================
+        function selectWeek(index) {
+            state.currentWeek = index;
+            renderVerdeling();
+        }
+
+        function selectCookWeek(index) {
+            state.currentCookWeek = index;
+            renderKoken();
+        }
+
+        function toggleTask(taskId) {
+            state.completedTasks[taskId] = !state.completedTasks[taskId];
+            localStorage.setItem('completedTasks', JSON.stringify(state.completedTasks));
+            renderVerdeling();
+        }
+
+        function saveSheetId() {
+            const input = document.getElementById('sheetIdInput');
+            const id = input.value.trim();
+            
+            if (!id) {
+                alert('Voer een Sheet ID in');
+                return;
+            }
+            
+            state.sheetId = id;
+            localStorage.setItem('sheetId', id);
+            
+            syncData();
+        }
+
+        // Tab navigation
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                state.currentTab = tab.dataset.tab;
+                document.getElementById(tab.dataset.tab).classList.add('active');
+                
+                renderCurrentTab();
+            });
+        });
+
+        // Person toggle
+        document.querySelectorAll('.person-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.person-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                state.currentPerson = btn.dataset.person;
+                renderVerdeling();
+            });
+        });
+
+        // ==================== INIT ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set sheet ID in input if exists
+            if (state.sheetId) {
+                document.getElementById('sheetIdInput').value = state.sheetId;
+            }
+            
+            // Render cached data first
+            if (state.data.verdeling || state.data.koken || state.data.tasks) {
+                renderCurrentTab();
+            }
+            
+            // Then sync fresh data
+            if (state.sheetId) {
+                syncData();
+            } else {
+                updateSyncStatus('error', 'Geen Sheet ID');
+            }
+        });
+
+        // Sync on visibility change (when app becomes visible again)
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && state.sheetId) {
+                syncData();
+            }
+        });
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(console.error);
+        }
+    </script>
+</body>
+</html>
