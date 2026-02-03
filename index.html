@@ -823,6 +823,28 @@
         function parseKoken(data) {
             const weeks = [];
             let currentWeek = null;
+            let lastDayIndex = -1;
+            
+            // Helper to detect week range pattern (e.g., "02-02 t/m 08-02" or "📅 02-02 t/m 08-02")
+            function isWeekHeader(text) {
+                if (!text) return false;
+                const str = text.toString().trim();
+                // Check for "t/m" pattern or date range pattern like "02-02"
+                if (str.includes('t/m')) return true;
+                // Also match patterns like "02-02" followed by more text
+                if (/\d{2}-\d{2}.*\d{2}-\d{2}/.test(str)) return true;
+                return false;
+            }
+            
+            // Helper to clean week range text
+            function cleanWeekRange(text) {
+                return text.toString()
+                    .replace(/📅/g, '')
+                    .replace(/[^\x20-\x7E\-\/tmTM0-9 ]/g, '') // Remove special chars except needed ones
+                    .trim();
+            }
+            
+            const dayNames = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'];
             
             for (const row of data) {
                 const firstCell = (row[0] || '').toString().trim();
@@ -831,11 +853,15 @@
                 // Skip main title row
                 if (firstCell.toLowerCase().includes('kookplanning') && !firstCell.includes('t/m')) continue;
                 
-                // Check for week range (can be in first cell with emoji, or plain)
-                if (firstCell.includes('t/m') || (firstCell.includes('📅') && firstCell.includes('t/m'))) {
-                    if (currentWeek && currentWeek.days.length > 0) weeks.push(currentWeek);
-                    const weekRange = firstCell.replace(/📅\s*/g, '').trim();
+                // Check for week range in first cell
+                if (isWeekHeader(firstCell)) {
+                    // Save previous week if it has days
+                    if (currentWeek && currentWeek.days.length > 0) {
+                        weeks.push(currentWeek);
+                    }
+                    const weekRange = cleanWeekRange(firstCell);
                     currentWeek = { range: weekRange, days: [] };
+                    lastDayIndex = -1;
                     continue;
                 }
                 
@@ -843,17 +869,36 @@
                 if (secondCell.toLowerCase() === 'dag') continue;
                 
                 // Day row - check if second column has a day name
-                const dayNames = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'];
-                if (secondCell && dayNames.includes(secondCell.toLowerCase()) && currentWeek) {
+                const dayIndex = dayNames.indexOf(secondCell.toLowerCase());
+                if (dayIndex !== -1) {
+                    // Detect new week: if we see Maandag again after Zondag (or any earlier day after a later day)
+                    if (currentWeek && currentWeek.days.length > 0 && dayIndex <= lastDayIndex) {
+                        // This is a new week - save the current one
+                        weeks.push(currentWeek);
+                        const weekNum = weeks.length + 1;
+                        currentWeek = { range: `Week ${weekNum}`, days: [] };
+                    }
+                    
+                    // If we don't have a current week yet, create one
+                    if (!currentWeek) {
+                        currentWeek = { range: 'Week 1', days: [] };
+                    }
+                    
                     currentWeek.days.push({
                         day: secondCell,
                         cook: (row[2] || '').toString().trim(),
                         meal: (row[3] || '').toString().trim()
                     });
+                    
+                    lastDayIndex = dayIndex;
                 }
             }
             
-            if (currentWeek && currentWeek.days.length > 0) weeks.push(currentWeek);
+            // Don't forget the last week
+            if (currentWeek && currentWeek.days.length > 0) {
+                weeks.push(currentWeek);
+            }
+            
             return weeks;
         }
 
