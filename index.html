@@ -13,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <style>
         * {
             margin: 0;
@@ -517,6 +518,131 @@
             border-radius: 10px;
             font-weight: 600;
         }
+
+        /* Notification settings */
+        .notification-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .notification-status.granted {
+            background: var(--light-green);
+            color: var(--green);
+        }
+
+        .notification-status.denied {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+
+        .notification-status.default {
+            background: #FEF3C7;
+            color: #D97706;
+        }
+
+        .notification-status .status-icon {
+            font-size: 20px;
+        }
+
+        .time-picker-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .time-slot {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--very-light-teal);
+            border-radius: 10px;
+        }
+
+        .time-slot input[type="time"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        .time-slot input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            accent-color: var(--med-teal);
+        }
+
+        .time-slot label {
+            font-size: 14px;
+            color: var(--med-text);
+            min-width: 80px;
+        }
+
+        .time-slot .remove-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: #FEE2E2;
+            color: #DC2626;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .add-time-btn {
+            width: 100%;
+            padding: 12px;
+            border: 2px dashed var(--border);
+            background: transparent;
+            color: var(--med-teal);
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+
+        .add-time-btn:active {
+            background: var(--very-light-teal);
+        }
+
+        .notification-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        .notification-btn.primary {
+            background: var(--med-teal);
+            color: white;
+        }
+
+        .notification-btn.secondary {
+            background: var(--very-light-teal);
+            color: var(--med-teal);
+        }
+
+        .notification-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .onesignal-input {
+            margin-bottom: 12px;
+        }
     </style>
 </head>
 <body>
@@ -602,6 +728,67 @@
                     Open je Google Sheet en kopieer het ID uit de URL:<br>
                     docs.google.com/spreadsheets/d/<strong>[DIT_IS_HET_ID]</strong>/edit
                 </p>
+            </div>
+
+            <!-- Notificatie Instellingen -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">🔔</span>
+                    <h2>Notificaties</h2>
+                </div>
+                
+                <div id="notificationStatus" class="notification-status default">
+                    <span class="status-icon">⏳</span>
+                    <span>Notificaties worden geladen...</span>
+                </div>
+
+                <div id="notificationSetup" style="display: none;">
+                    <p style="font-size: 14px; color: var(--med-text); margin-bottom: 12px;">
+                        Voer je OneSignal App ID in om notificaties in te schakelen:
+                    </p>
+                    <input type="text" id="onesignalAppId" class="onesignal-input" placeholder="OneSignal App ID (bijv. a1b2c3d4-...)" />
+                    <button class="notification-btn primary" onclick="saveOneSignalId()">OneSignal Koppelen</button>
+                    <p class="help-text">
+                        📖 <strong>Waar vind je dit?</strong><br>
+                        1. Ga naar <a href="https://onesignal.com" target="_blank">onesignal.com</a><br>
+                        2. Open je app → Settings → Keys & IDs<br>
+                        3. Kopieer de "App ID"
+                    </p>
+                </div>
+
+                <div id="notificationSettings" style="display: none;">
+                    <p style="font-size: 14px; color: var(--med-text); margin-bottom: 12px;">
+                        Stel je dagelijkse herinneringstijden in:
+                    </p>
+                    
+                    <div id="timeSlots" class="time-picker-grid">
+                        <!-- Time slots worden hier dynamisch toegevoegd -->
+                    </div>
+
+                    <button class="add-time-btn" onclick="addTimeSlot()">
+                        + Tijd toevoegen
+                    </button>
+
+                    <button class="notification-btn primary" onclick="saveNotificationTimes()">
+                        💾 Tijden Opslaan
+                    </button>
+                    
+                    <button class="notification-btn secondary" onclick="sendTestNotification()">
+                        🧪 Test Notificatie
+                    </button>
+
+                    <p class="help-text" style="margin-top: 12px;">
+                        💡 <strong>Let op:</strong> Notificaties worden elke dag op de ingestelde tijden verstuurd via OneSignal. Je kunt dit ook aanpassen in het OneSignal dashboard.
+                    </p>
+                </div>
+
+                <div id="notificationDenied" style="display: none;">
+                    <p style="font-size: 14px; color: var(--med-text); line-height: 1.6;">
+                        ⚠️ Notificaties zijn geblokkeerd. Om dit te herstellen:<br><br>
+                        <strong>iPhone:</strong> Instellingen → Safari → Notificaties → zoek deze site<br>
+                        <strong>Android:</strong> Tik op 🔒 in de adresbalk → Site-instellingen → Notificaties
+                    </p>
+                </div>
             </div>
 
             <div class="card">
@@ -1186,6 +1373,234 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js').catch(console.error);
         }
+
+        // ==================== ONESIGNAL NOTIFICATIONS ====================
+        let oneSignalInitialized = false;
+        const notificationState = {
+            appId: localStorage.getItem('oneSignalAppId') || '',
+            times: JSON.parse(localStorage.getItem('notificationTimes') || '[{"time": "08:00", "enabled": true}]'),
+            permission: 'default'
+        };
+
+        // Initialize OneSignal
+        async function initOneSignal() {
+            if (!notificationState.appId || oneSignalInitialized) return;
+            
+            try {
+                window.OneSignalDeferred = window.OneSignalDeferred || [];
+                window.OneSignalDeferred.push(async function(OneSignal) {
+                    await OneSignal.init({
+                        appId: notificationState.appId,
+                        notifyButton: { enable: false },
+                        allowLocalhostAsSecureOrigin: true
+                    });
+                    
+                    oneSignalInitialized = true;
+                    
+                    // Check permission status
+                    const permission = await OneSignal.Notifications.permission;
+                    notificationState.permission = permission ? 'granted' : 'default';
+                    
+                    // Check if denied
+                    if (Notification.permission === 'denied') {
+                        notificationState.permission = 'denied';
+                    }
+                    
+                    updateNotificationUI();
+                    
+                    // Listen for permission changes
+                    OneSignal.Notifications.addEventListener('permissionChange', (permission) => {
+                        notificationState.permission = permission ? 'granted' : 'default';
+                        updateNotificationUI();
+                    });
+                });
+            } catch (error) {
+                console.error('OneSignal init error:', error);
+                updateNotificationUI();
+            }
+        }
+
+        function updateNotificationUI() {
+            const statusEl = document.getElementById('notificationStatus');
+            const setupEl = document.getElementById('notificationSetup');
+            const settingsEl = document.getElementById('notificationSettings');
+            const deniedEl = document.getElementById('notificationDenied');
+            const appIdInput = document.getElementById('onesignalAppId');
+            
+            // Set app ID in input if exists
+            if (notificationState.appId) {
+                appIdInput.value = notificationState.appId;
+            }
+            
+            // Hide all sections first
+            setupEl.style.display = 'none';
+            settingsEl.style.display = 'none';
+            deniedEl.style.display = 'none';
+            
+            // No OneSignal App ID configured
+            if (!notificationState.appId) {
+                statusEl.className = 'notification-status default';
+                statusEl.innerHTML = '<span class="status-icon">⚙️</span><span>Configureer OneSignal om notificaties te ontvangen</span>';
+                setupEl.style.display = 'block';
+                return;
+            }
+            
+            // Check permission status
+            if (notificationState.permission === 'denied') {
+                statusEl.className = 'notification-status denied';
+                statusEl.innerHTML = '<span class="status-icon">🚫</span><span>Notificaties zijn geblokkeerd</span>';
+                deniedEl.style.display = 'block';
+                return;
+            }
+            
+            if (notificationState.permission === 'granted') {
+                statusEl.className = 'notification-status granted';
+                statusEl.innerHTML = '<span class="status-icon">✅</span><span>Notificaties zijn ingeschakeld</span>';
+                settingsEl.style.display = 'block';
+                renderTimeSlots();
+                return;
+            }
+            
+            // Default - need to request permission
+            statusEl.className = 'notification-status default';
+            statusEl.innerHTML = '<span class="status-icon">🔔</span><span>Klik hieronder om notificaties in te schakelen</span>';
+            setupEl.style.display = 'block';
+            settingsEl.style.display = 'block';
+            renderTimeSlots();
+        }
+
+        async function saveOneSignalId() {
+            const input = document.getElementById('onesignalAppId');
+            const id = input.value.trim();
+            
+            if (!id) {
+                alert('Voer een OneSignal App ID in');
+                return;
+            }
+            
+            notificationState.appId = id;
+            localStorage.setItem('oneSignalAppId', id);
+            
+            // Re-initialize OneSignal with new ID
+            oneSignalInitialized = false;
+            await initOneSignal();
+            
+            // Request permission
+            requestNotificationPermission();
+        }
+
+        async function requestNotificationPermission() {
+            if (!notificationState.appId) {
+                alert('Configureer eerst je OneSignal App ID');
+                return;
+            }
+            
+            try {
+                window.OneSignalDeferred = window.OneSignalDeferred || [];
+                window.OneSignalDeferred.push(async function(OneSignal) {
+                    await OneSignal.Notifications.requestPermission();
+                    notificationState.permission = OneSignal.Notifications.permission ? 'granted' : 'default';
+                    updateNotificationUI();
+                });
+            } catch (error) {
+                console.error('Permission request error:', error);
+            }
+        }
+
+        function renderTimeSlots() {
+            const container = document.getElementById('timeSlots');
+            if (!container) return;
+            
+            container.innerHTML = notificationState.times.map((slot, index) => `
+                <div class="time-slot">
+                    <input type="checkbox" 
+                           id="timeEnabled${index}" 
+                           ${slot.enabled ? 'checked' : ''} 
+                           onchange="toggleTimeSlot(${index})">
+                    <label for="timeEnabled${index}">Actief</label>
+                    <input type="time" 
+                           value="${slot.time}" 
+                           onchange="updateTimeSlot(${index}, this.value)">
+                    ${notificationState.times.length > 1 ? `
+                        <button class="remove-btn" onclick="removeTimeSlot(${index})">×</button>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function addTimeSlot() {
+            notificationState.times.push({ time: '12:00', enabled: true });
+            renderTimeSlots();
+        }
+
+        function removeTimeSlot(index) {
+            if (notificationState.times.length > 1) {
+                notificationState.times.splice(index, 1);
+                renderTimeSlots();
+            }
+        }
+
+        function toggleTimeSlot(index) {
+            notificationState.times[index].enabled = !notificationState.times[index].enabled;
+        }
+
+        function updateTimeSlot(index, value) {
+            notificationState.times[index].time = value;
+        }
+
+        function saveNotificationTimes() {
+            localStorage.setItem('notificationTimes', JSON.stringify(notificationState.times));
+            
+            // Show confirmation
+            alert(`✅ Notificatietijden opgeslagen!\n\nJe ontvangt herinneringen om:\n${
+                notificationState.times
+                    .filter(t => t.enabled)
+                    .map(t => t.time)
+                    .join(', ')
+            }\n\n💡 Tip: Stel de scheduled notifications in via het OneSignal dashboard voor server-side delivery.`);
+        }
+
+        async function sendTestNotification() {
+            if (!notificationState.appId) {
+                alert('Configureer eerst je OneSignal App ID');
+                return;
+            }
+            
+            if (notificationState.permission !== 'granted') {
+                alert('Schakel eerst notificaties in');
+                return;
+            }
+            
+            try {
+                // Use the browser's native notification as a test
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification('🏠 Huishouden App', {
+                        body: 'Test notificatie! Je ontvangt nu herinneringen voor je taken.',
+                        icon: 'icon-192.png',
+                        badge: 'icon-192.png'
+                    });
+                    
+                    alert('✅ Test notificatie verzonden!\n\nAls je geen notificatie ziet, controleer je telefooninstellingen.');
+                } else {
+                    alert('⚠️ Kon geen test notificatie versturen.\nControleer of notificaties zijn ingeschakeld.');
+                }
+            } catch (error) {
+                console.error('Test notification error:', error);
+                alert('❌ Er ging iets mis bij het versturen van de test notificatie.');
+            }
+        }
+
+        // Initialize notification UI when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Small delay to ensure OneSignal SDK is loaded
+            setTimeout(() => {
+                if (notificationState.appId) {
+                    initOneSignal();
+                } else {
+                    updateNotificationUI();
+                }
+            }, 500);
+        });
     </script>
 </body>
 </html>
