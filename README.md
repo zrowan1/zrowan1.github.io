@@ -126,54 +126,27 @@ De app haalt nu automatisch je data op!
 
 ---
 
-## 🔔 Stap 5: Notificaties Instellen (Optioneel)
+## 🔔 Stap 5: Dagelijkse Herinnering (iOS Shortcut)
 
-Wil je dagelijkse herinneringen ontvangen? Dat kan via OneSignal (gratis)!
+Wil je elke ochtend herinnerd worden aan je taken? Maak een iOS Shortcut!
 
-### 5.1 OneSignal Account Aanmaken
+### Zo maak je de herinnering:
 
-1. Ga naar [onesignal.com](https://onesignal.com) en maak een gratis account
-2. Klik op **"New App/Website"**
-3. Kies een naam (bijv. "Huishouden App")
-4. Selecteer **Web** als platform
-5. Kies **"Typical Site"** setup
+1. Open de **Shortcuts** app op je iPhone
+2. Ga naar **Automatisering** (onderaan)
+3. Tik op **+** → **Persoonlijke automatisering**
+4. Kies **Tijd van de dag**
+5. Stel je tijd in (bijv. **08:00**)
+6. Kies **Dagelijks**
+7. Tik **Volgende**
+8. Zoek en voeg toe: **Toon melding**
+9. Typ: `🏠 Vergeet je huishoudtaken niet!`
+10. Voeg toe: **Open app** → kies **Huishouden**
+11. Tik **Volgende**
+12. Zet **"Vraag bevestiging"** **UIT**
+13. Tik **Gereed**
 
-### 5.2 Site Configureren
-
-1. Vul je site URL in (bijv. `https://jouw-naam.github.io`)
-2. Bij **"Permission Prompt"**: kies wanneer de notificatie-vraag verschijnt
-3. Klik door naar het einde van de setup
-
-### 5.3 App ID Kopiëren
-
-1. Ga naar **Settings** → **Keys & IDs**
-2. Kopieer de **"App ID"** (ziet eruit als `a1b2c3d4-e5f6-...`)
-
-### 5.4 In de App Configureren
-
-1. Open de Huishouden app
-2. Ga naar **Setup** tab
-3. Scroll naar **🔔 Notificaties**
-4. Plak je **OneSignal App ID**
-5. Klik op **"OneSignal Koppelen"**
-6. Sta notificaties toe wanneer je telefoon vraagt
-7. Stel je gewenste herinneringstijden in
-
-### 5.5 Scheduled Notificaties (Aanbevolen)
-
-Voor betrouwbare dagelijkse notificaties op vaste tijden:
-
-1. Ga naar je [OneSignal Dashboard](https://dashboard.onesignal.com)
-2. Klik op **Messages** → **New Push**
-3. Stel je bericht in:
-   - **Title**: `🏠 Huishouden`
-   - **Message**: `Vergeet je taken van vandaag niet!`
-4. Bij **Delivery**: kies **Scheduled**
-5. Kies **Intelligent Delivery** of een vast tijdstip
-6. Kies **Repeating** en stel in op dagelijks
-7. Klik op **Confirm**
-
-Nu krijg je elke dag een herinnering! 📬
+Nu krijg je elke ochtend een melding en opent de app direct naar je taken van vandaag! 📬
 
 ---
 

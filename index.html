@@ -13,7 +13,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <style>
         * {
             margin: 0;
@@ -519,129 +518,193 @@
             font-weight: 600;
         }
 
-        /* Notification settings */
-        .notification-status {
+        /* Vandaag tab styles */
+        .vandaag-header {
+            background: linear-gradient(135deg, var(--med-teal) 0%, var(--dark-teal) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .vandaag-header .date {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+
+        .vandaag-header .greeting {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .vandaag-section {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .vandaag-section-header {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 16px;
-            font-size: 14px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
         }
 
-        .notification-status.granted {
-            background: var(--light-green);
-            color: var(--green);
-        }
-
-        .notification-status.denied {
-            background: #FEE2E2;
-            color: #DC2626;
-        }
-
-        .notification-status.default {
-            background: #FEF3C7;
-            color: #D97706;
-        }
-
-        .notification-status .status-icon {
+        .vandaag-section-header .icon {
             font-size: 20px;
         }
 
-        .time-picker-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 16px;
+        .vandaag-section-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            flex: 1;
         }
 
-        .time-slot {
+        .vandaag-section-header .badge {
+            background: var(--very-light-teal);
+            color: var(--med-teal);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .vandaag-task {
             display: flex;
             align-items: center;
             gap: 12px;
             padding: 12px;
             background: var(--very-light-teal);
             border-radius: 10px;
-        }
-
-        .time-slot input[type="time"] {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 16px;
-            font-family: inherit;
-        }
-
-        .time-slot input[type="checkbox"] {
-            width: 22px;
-            height: 22px;
-            accent-color: var(--med-teal);
-        }
-
-        .time-slot label {
-            font-size: 14px;
-            color: var(--med-text);
-            min-width: 80px;
-        }
-
-        .time-slot .remove-btn {
-            width: 32px;
-            height: 32px;
-            border: none;
-            background: #FEE2E2;
-            color: #DC2626;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        .add-time-btn {
-            width: 100%;
-            padding: 12px;
-            border: 2px dashed var(--border);
-            background: transparent;
-            color: var(--med-teal);
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-bottom: 16px;
-        }
-
-        .add-time-btn:active {
-            background: var(--very-light-teal);
-        }
-
-        .notification-btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
             margin-bottom: 8px;
+            font-size: 14px;
         }
 
-        .notification-btn.primary {
-            background: var(--med-teal);
+        .vandaag-task:last-child {
+            margin-bottom: 0;
+        }
+
+        .vandaag-task.done {
+            opacity: 0.6;
+        }
+
+        .vandaag-task.done .task-text {
+            text-decoration: line-through;
+        }
+
+        .vandaag-task .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--med-teal);
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
             color: white;
         }
 
-        .notification-btn.secondary {
+        .vandaag-task.done .checkbox {
+            background: var(--green);
+            border-color: var(--green);
+        }
+
+        .vandaag-koken {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
             background: var(--very-light-teal);
-            color: var(--med-teal);
+            border-radius: 12px;
         }
 
-        .notification-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .vandaag-koken .chef-icon {
+            font-size: 40px;
         }
 
-        .onesignal-input {
-            margin-bottom: 12px;
+        .vandaag-koken .info {
+            flex: 1;
+        }
+
+        .vandaag-koken .chef-name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .vandaag-koken .chef-name.rowan {
+            color: var(--rowan-text);
+        }
+
+        .vandaag-koken .chef-name.jamie {
+            color: var(--jamie-text);
+        }
+
+        .vandaag-koken .chef-name.samen {
+            color: var(--samen-text);
+        }
+
+        .vandaag-koken .meal {
+            font-size: 14px;
+            color: var(--med-text);
+        }
+
+        .vandaag-empty {
+            text-align: center;
+            padding: 20px;
+            color: var(--light-text);
+            font-size: 14px;
+        }
+
+        .vandaag-empty .icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--green) 0%, var(--med-teal) 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .shortcut-tip {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .shortcut-tip .tip-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #92400E;
+            margin-bottom: 8px;
+        }
+
+        .shortcut-tip .tip-text {
+            font-size: 13px;
+            color: #78350F;
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -656,17 +719,17 @@
     </header>
 
     <nav class="tabs">
-        <button class="tab active" data-tab="verdeling">
+        <button class="tab active" data-tab="vandaag">
+            <span class="tab-icon">📅</span>
+            Vandaag
+        </button>
+        <button class="tab" data-tab="verdeling">
             <span class="tab-icon">📋</span>
             Taken
         </button>
         <button class="tab" data-tab="koken">
             <span class="tab-icon">🍳</span>
             Koken
-        </button>
-        <button class="tab" data-tab="overzicht">
-            <span class="tab-icon">🏠</span>
-            Overzicht
         </button>
         <button class="tab" data-tab="instellingen">
             <span class="tab-icon">⚙️</span>
@@ -675,8 +738,56 @@
     </nav>
 
     <main class="content">
+        <!-- Vandaag Tab -->
+        <div class="tab-content active" id="vandaag">
+            <div class="vandaag-header">
+                <div class="date" id="vandaagDate"></div>
+                <div class="greeting" id="vandaagGreeting">Goedemorgen!</div>
+            </div>
+
+            <div class="vandaag-section">
+                <div class="vandaag-section-header">
+                    <span class="icon">✅</span>
+                    <h2>Jouw taken vandaag</h2>
+                    <span class="badge" id="taskProgress">0/0</span>
+                </div>
+                <div id="vandaagTasks">
+                    <div class="vandaag-empty">
+                        <div class="icon">📋</div>
+                        <p>Laden...</p>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="vandaag-section">
+                <div class="vandaag-section-header">
+                    <span class="icon">🍳</span>
+                    <h2>Koken vandaag</h2>
+                </div>
+                <div id="vandaagKoken">
+                    <div class="vandaag-empty">
+                        <div class="icon">🍽️</div>
+                        <p>Laden...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shortcut-tip" id="shortcutTip">
+                <div class="tip-header">
+                    💡 Tip: Dagelijkse herinnering
+                </div>
+                <div class="tip-text">
+                    Wil je elke ochtend een herinnering? Maak een iOS Shortcut:<br>
+                    <strong>Automatisering → Tijd → 08:00 → Toon melding + Open app</strong>
+                </div>
+            </div>
+        </div>
+
         <!-- Taakverdeling Tab -->
-        <div class="tab-content active" id="verdeling">
+        <div class="tab-content" id="verdeling">
             <div class="week-selector" id="weekSelector"></div>
             
             <div class="person-toggle">
@@ -702,15 +813,6 @@
             </div>
         </div>
 
-        <!-- Overzicht Tab -->
-        <div class="tab-content" id="overzicht">
-            <div class="room-grid" id="roomGrid">
-                <div class="loading-spinner">
-                    <div class="spinner"></div>
-                </div>
-            </div>
-        </div>
-
         <!-- Instellingen Tab -->
         <div class="tab-content" id="instellingen">
             <div class="card settings-card">
@@ -728,67 +830,6 @@
                     Open je Google Sheet en kopieer het ID uit de URL:<br>
                     docs.google.com/spreadsheets/d/<strong>[DIT_IS_HET_ID]</strong>/edit
                 </p>
-            </div>
-
-            <!-- Notificatie Instellingen -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="icon">🔔</span>
-                    <h2>Notificaties</h2>
-                </div>
-                
-                <div id="notificationStatus" class="notification-status default">
-                    <span class="status-icon">⏳</span>
-                    <span>Notificaties worden geladen...</span>
-                </div>
-
-                <div id="notificationSetup" style="display: none;">
-                    <p style="font-size: 14px; color: var(--med-text); margin-bottom: 12px;">
-                        Voer je OneSignal App ID in om notificaties in te schakelen:
-                    </p>
-                    <input type="text" id="onesignalAppId" class="onesignal-input" placeholder="OneSignal App ID (bijv. a1b2c3d4-...)" />
-                    <button class="notification-btn primary" onclick="saveOneSignalId()">OneSignal Koppelen</button>
-                    <p class="help-text">
-                        📖 <strong>Waar vind je dit?</strong><br>
-                        1. Ga naar <a href="https://onesignal.com" target="_blank">onesignal.com</a><br>
-                        2. Open je app → Settings → Keys & IDs<br>
-                        3. Kopieer de "App ID"
-                    </p>
-                </div>
-
-                <div id="notificationSettings" style="display: none;">
-                    <p style="font-size: 14px; color: var(--med-text); margin-bottom: 12px;">
-                        Stel je dagelijkse herinneringstijden in:
-                    </p>
-                    
-                    <div id="timeSlots" class="time-picker-grid">
-                        <!-- Time slots worden hier dynamisch toegevoegd -->
-                    </div>
-
-                    <button class="add-time-btn" onclick="addTimeSlot()">
-                        + Tijd toevoegen
-                    </button>
-
-                    <button class="notification-btn primary" onclick="saveNotificationTimes()">
-                        💾 Tijden Opslaan
-                    </button>
-                    
-                    <button class="notification-btn secondary" onclick="sendTestNotification()">
-                        🧪 Test Notificatie
-                    </button>
-
-                    <p class="help-text" style="margin-top: 12px;">
-                        💡 <strong>Let op:</strong> Notificaties worden elke dag op de ingestelde tijden verstuurd via OneSignal. Je kunt dit ook aanpassen in het OneSignal dashboard.
-                    </p>
-                </div>
-
-                <div id="notificationDenied" style="display: none;">
-                    <p style="font-size: 14px; color: var(--med-text); line-height: 1.6;">
-                        ⚠️ Notificaties zijn geblokkeerd. Om dit te herstellen:<br><br>
-                        <strong>iPhone:</strong> Instellingen → Safari → Notificaties → zoek deze site<br>
-                        <strong>Android:</strong> Tik op 🔒 in de adresbalk → Site-instellingen → Notificaties
-                    </p>
-                </div>
             </div>
 
             <div class="card">
@@ -828,7 +869,7 @@
         // ==================== STATE ====================
         let state = {
             sheetId: localStorage.getItem('sheetId') || '',
-            currentTab: 'verdeling',
+            currentTab: 'vandaag',
             currentWeek: 0,
             currentCookWeek: 0,
             currentPerson: 'rowan',
@@ -1122,10 +1163,147 @@
         // ==================== RENDERING ====================
         function renderCurrentTab() {
             switch (state.currentTab) {
+                case 'vandaag': renderVandaag(); break;
                 case 'verdeling': renderVerdeling(); break;
                 case 'koken': renderKoken(); break;
-                case 'overzicht': renderOverzicht(); break;
             }
+        }
+
+        function renderVandaag() {
+            const today = new Date();
+            const dayName = today.toLocaleDateString('nl-NL', { weekday: 'long' });
+            const dateStr = today.toLocaleDateString('nl-NL', { 
+                weekday: 'long', 
+                day: 'numeric', 
+                month: 'long' 
+            });
+            
+            // Set greeting based on time
+            const hour = today.getHours();
+            let greeting = 'Goedemorgen!';
+            if (hour >= 12 && hour < 18) greeting = 'Goedemiddag!';
+            if (hour >= 18) greeting = 'Goedenavond!';
+            
+            document.getElementById('vandaagDate').textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+            document.getElementById('vandaagGreeting').textContent = greeting;
+            
+            // Render today's tasks
+            renderVandaagTasks(dayName);
+            
+            // Render today's cooking
+            renderVandaagKoken(dayName);
+        }
+
+        function renderVandaagTasks(dayName) {
+            const container = document.getElementById('vandaagTasks');
+            const progressEl = document.getElementById('taskProgress');
+            const progressFill = document.getElementById('progressFill');
+            
+            if (!state.data.verdeling || state.data.verdeling.length === 0) {
+                container.innerHTML = `
+                    <div class="vandaag-empty">
+                        <div class="icon">📋</div>
+                        <p>Geen taken gevonden.<br>Koppel je Google Sheet in Setup.</p>
+                    </div>
+                `;
+                progressEl.textContent = '0/0';
+                progressFill.style.width = '0%';
+                return;
+            }
+            
+            // Find current week (week 0 for now, could be smarter later)
+            const week = state.data.verdeling[state.currentWeek];
+            const personTasks = week[state.currentPerson] || {};
+            const tasks = personTasks[dayName.charAt(0).toUpperCase() + dayName.slice(1)] || [];
+            
+            if (tasks.length === 0) {
+                container.innerHTML = `
+                    <div class="vandaag-empty">
+                        <div class="icon">🎉</div>
+                        <p>Geen taken voor vandaag!</p>
+                    </div>
+                `;
+                progressEl.textContent = '0/0';
+                progressFill.style.width = '100%';
+                return;
+            }
+            
+            let doneCount = 0;
+            let html = '';
+            
+            for (const task of tasks) {
+                const taskId = `${week.range}-${state.currentPerson}-${dayName.charAt(0).toUpperCase() + dayName.slice(1)}-${task}`;
+                const isDone = state.completedTasks[taskId];
+                if (isDone) doneCount++;
+                
+                html += `
+                    <div class="vandaag-task ${isDone ? 'done' : ''}" onclick="toggleVandaagTask('${taskId}')">
+                        <div class="checkbox">${isDone ? '✓' : ''}</div>
+                        <span class="task-text">${task}</span>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+            progressEl.textContent = `${doneCount}/${tasks.length}`;
+            progressFill.style.width = `${(doneCount / tasks.length) * 100}%`;
+        }
+
+        function renderVandaagKoken(dayName) {
+            const container = document.getElementById('vandaagKoken');
+            
+            if (!state.data.koken || state.data.koken.length === 0) {
+                container.innerHTML = `
+                    <div class="vandaag-empty">
+                        <div class="icon">🍽️</div>
+                        <p>Geen kookplanning gevonden.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Find today in current week's cooking plan
+            const week = state.data.koken[state.currentCookWeek];
+            const todayPlan = week.days.find(d => 
+                d.day.toLowerCase() === dayName.toLowerCase()
+            );
+            
+            if (!todayPlan || !todayPlan.cook) {
+                container.innerHTML = `
+                    <div class="vandaag-empty">
+                        <div class="icon">🍽️</div>
+                        <p>Geen kookinfo voor vandaag.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const cookClass = todayPlan.cook.toLowerCase().includes('rowan') ? 'rowan' :
+                              todayPlan.cook.toLowerCase().includes('jamie') ? 'jamie' :
+                              todayPlan.cook.toLowerCase().includes('samen') ? 'samen' : '';
+            
+            const chefEmoji = cookClass === 'rowan' ? '👨‍🍳' : 
+                              cookClass === 'jamie' ? '👩‍🍳' : 
+                              cookClass === 'samen' ? '👫' : '🍳';
+            
+            container.innerHTML = `
+                <div class="vandaag-koken">
+                    <div class="chef-icon">${chefEmoji}</div>
+                    <div class="info">
+                        <div class="chef-name ${cookClass}">${todayPlan.cook} kookt</div>
+                        <div class="meal">${todayPlan.meal || 'Nog niet bepaald'}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleVandaagTask(taskId) {
+            state.completedTasks[taskId] = !state.completedTasks[taskId];
+            localStorage.setItem('completedTasks', JSON.stringify(state.completedTasks));
+            
+            const today = new Date();
+            const dayName = today.toLocaleDateString('nl-NL', { weekday: 'long' });
+            renderVandaagTasks(dayName);
         }
 
         function renderVerdeling() {
@@ -1232,60 +1410,6 @@
             }).join('');
         }
 
-        function renderOverzicht() {
-            const container = document.getElementById('roomGrid');
-            
-            if (!state.data.tasks || state.data.tasks.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state" style="grid-column: 1/-1;">
-                        <div class="icon">🏠</div>
-                        <p>Geen taken overzicht gevonden.<br>Koppel eerst je Google Sheet.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const colors = [
-                '#2A7F8F', '#3A8E6E', '#5C8A4D', '#8B7355',
-                '#7B6B8A', '#6B7FAA', '#4A8B8B', '#7A7A5A',
-                '#6E8B74', '#8B6B6B'
-            ];
-
-            // Find the header row (first row that has multiple columns filled, skip title)
-            let headerRowIndex = 0;
-            for (let i = 0; i < state.data.tasks.length; i++) {
-                const row = state.data.tasks[i];
-                const filledCells = row.filter(cell => cell && cell.toString().trim()).length;
-                // Skip rows with only 1 filled cell (title rows) or that contain emoji titles
-                if (filledCells > 2 && !row[0]?.toString().includes('🏠')) {
-                    headerRowIndex = i;
-                    break;
-                }
-            }
-
-            const headers = state.data.tasks[headerRowIndex];
-            const tasks = state.data.tasks.slice(headerRowIndex + 1);
-            
-            container.innerHTML = headers.map((room, colIndex) => {
-                if (!room || room.toString().includes('🏠')) return '';
-                
-                const roomTasks = tasks
-                    .map(row => row[colIndex])
-                    .filter(task => task && task.toString().trim());
-                
-                return `
-                    <div class="room-card">
-                        <div class="room-header" style="background: ${colors[colIndex % colors.length]}">
-                            ${room}
-                        </div>
-                        <ul class="room-tasks">
-                            ${roomTasks.map(t => `<li>${t}</li>`).join('')}
-                        </ul>
-                    </div>
-                `;
-            }).join('');
-        }
-
         // ==================== EVENT HANDLERS ====================
         function selectWeek(index) {
             state.currentWeek = index;
@@ -1373,234 +1497,6 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js').catch(console.error);
         }
-
-        // ==================== ONESIGNAL NOTIFICATIONS ====================
-        let oneSignalInitialized = false;
-        const notificationState = {
-            appId: localStorage.getItem('oneSignalAppId') || '',
-            times: JSON.parse(localStorage.getItem('notificationTimes') || '[{"time": "08:00", "enabled": true}]'),
-            permission: 'default'
-        };
-
-        // Initialize OneSignal
-        async function initOneSignal() {
-            if (!notificationState.appId || oneSignalInitialized) return;
-            
-            try {
-                window.OneSignalDeferred = window.OneSignalDeferred || [];
-                window.OneSignalDeferred.push(async function(OneSignal) {
-                    await OneSignal.init({
-                        appId: notificationState.appId,
-                        notifyButton: { enable: false },
-                        allowLocalhostAsSecureOrigin: true
-                    });
-                    
-                    oneSignalInitialized = true;
-                    
-                    // Check permission status
-                    const permission = await OneSignal.Notifications.permission;
-                    notificationState.permission = permission ? 'granted' : 'default';
-                    
-                    // Check if denied
-                    if (Notification.permission === 'denied') {
-                        notificationState.permission = 'denied';
-                    }
-                    
-                    updateNotificationUI();
-                    
-                    // Listen for permission changes
-                    OneSignal.Notifications.addEventListener('permissionChange', (permission) => {
-                        notificationState.permission = permission ? 'granted' : 'default';
-                        updateNotificationUI();
-                    });
-                });
-            } catch (error) {
-                console.error('OneSignal init error:', error);
-                updateNotificationUI();
-            }
-        }
-
-        function updateNotificationUI() {
-            const statusEl = document.getElementById('notificationStatus');
-            const setupEl = document.getElementById('notificationSetup');
-            const settingsEl = document.getElementById('notificationSettings');
-            const deniedEl = document.getElementById('notificationDenied');
-            const appIdInput = document.getElementById('onesignalAppId');
-            
-            // Set app ID in input if exists
-            if (notificationState.appId) {
-                appIdInput.value = notificationState.appId;
-            }
-            
-            // Hide all sections first
-            setupEl.style.display = 'none';
-            settingsEl.style.display = 'none';
-            deniedEl.style.display = 'none';
-            
-            // No OneSignal App ID configured
-            if (!notificationState.appId) {
-                statusEl.className = 'notification-status default';
-                statusEl.innerHTML = '<span class="status-icon">⚙️</span><span>Configureer OneSignal om notificaties te ontvangen</span>';
-                setupEl.style.display = 'block';
-                return;
-            }
-            
-            // Check permission status
-            if (notificationState.permission === 'denied') {
-                statusEl.className = 'notification-status denied';
-                statusEl.innerHTML = '<span class="status-icon">🚫</span><span>Notificaties zijn geblokkeerd</span>';
-                deniedEl.style.display = 'block';
-                return;
-            }
-            
-            if (notificationState.permission === 'granted') {
-                statusEl.className = 'notification-status granted';
-                statusEl.innerHTML = '<span class="status-icon">✅</span><span>Notificaties zijn ingeschakeld</span>';
-                settingsEl.style.display = 'block';
-                renderTimeSlots();
-                return;
-            }
-            
-            // Default - need to request permission
-            statusEl.className = 'notification-status default';
-            statusEl.innerHTML = '<span class="status-icon">🔔</span><span>Klik hieronder om notificaties in te schakelen</span>';
-            setupEl.style.display = 'block';
-            settingsEl.style.display = 'block';
-            renderTimeSlots();
-        }
-
-        async function saveOneSignalId() {
-            const input = document.getElementById('onesignalAppId');
-            const id = input.value.trim();
-            
-            if (!id) {
-                alert('Voer een OneSignal App ID in');
-                return;
-            }
-            
-            notificationState.appId = id;
-            localStorage.setItem('oneSignalAppId', id);
-            
-            // Re-initialize OneSignal with new ID
-            oneSignalInitialized = false;
-            await initOneSignal();
-            
-            // Request permission
-            requestNotificationPermission();
-        }
-
-        async function requestNotificationPermission() {
-            if (!notificationState.appId) {
-                alert('Configureer eerst je OneSignal App ID');
-                return;
-            }
-            
-            try {
-                window.OneSignalDeferred = window.OneSignalDeferred || [];
-                window.OneSignalDeferred.push(async function(OneSignal) {
-                    await OneSignal.Notifications.requestPermission();
-                    notificationState.permission = OneSignal.Notifications.permission ? 'granted' : 'default';
-                    updateNotificationUI();
-                });
-            } catch (error) {
-                console.error('Permission request error:', error);
-            }
-        }
-
-        function renderTimeSlots() {
-            const container = document.getElementById('timeSlots');
-            if (!container) return;
-            
-            container.innerHTML = notificationState.times.map((slot, index) => `
-                <div class="time-slot">
-                    <input type="checkbox" 
-                           id="timeEnabled${index}" 
-                           ${slot.enabled ? 'checked' : ''} 
-                           onchange="toggleTimeSlot(${index})">
-                    <label for="timeEnabled${index}">Actief</label>
-                    <input type="time" 
-                           value="${slot.time}" 
-                           onchange="updateTimeSlot(${index}, this.value)">
-                    ${notificationState.times.length > 1 ? `
-                        <button class="remove-btn" onclick="removeTimeSlot(${index})">×</button>
-                    ` : ''}
-                </div>
-            `).join('');
-        }
-
-        function addTimeSlot() {
-            notificationState.times.push({ time: '12:00', enabled: true });
-            renderTimeSlots();
-        }
-
-        function removeTimeSlot(index) {
-            if (notificationState.times.length > 1) {
-                notificationState.times.splice(index, 1);
-                renderTimeSlots();
-            }
-        }
-
-        function toggleTimeSlot(index) {
-            notificationState.times[index].enabled = !notificationState.times[index].enabled;
-        }
-
-        function updateTimeSlot(index, value) {
-            notificationState.times[index].time = value;
-        }
-
-        function saveNotificationTimes() {
-            localStorage.setItem('notificationTimes', JSON.stringify(notificationState.times));
-            
-            // Show confirmation
-            alert(`✅ Notificatietijden opgeslagen!\n\nJe ontvangt herinneringen om:\n${
-                notificationState.times
-                    .filter(t => t.enabled)
-                    .map(t => t.time)
-                    .join(', ')
-            }\n\n💡 Tip: Stel de scheduled notifications in via het OneSignal dashboard voor server-side delivery.`);
-        }
-
-        async function sendTestNotification() {
-            if (!notificationState.appId) {
-                alert('Configureer eerst je OneSignal App ID');
-                return;
-            }
-            
-            if (notificationState.permission !== 'granted') {
-                alert('Schakel eerst notificaties in');
-                return;
-            }
-            
-            try {
-                // Use the browser's native notification as a test
-                if ('Notification' in window && Notification.permission === 'granted') {
-                    new Notification('🏠 Huishouden App', {
-                        body: 'Test notificatie! Je ontvangt nu herinneringen voor je taken.',
-                        icon: 'icon-192.png',
-                        badge: 'icon-192.png'
-                    });
-                    
-                    alert('✅ Test notificatie verzonden!\n\nAls je geen notificatie ziet, controleer je telefooninstellingen.');
-                } else {
-                    alert('⚠️ Kon geen test notificatie versturen.\nControleer of notificaties zijn ingeschakeld.');
-                }
-            } catch (error) {
-                console.error('Test notification error:', error);
-                alert('❌ Er ging iets mis bij het versturen van de test notificatie.');
-            }
-        }
-
-        // Initialize notification UI when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            // Small delay to ensure OneSignal SDK is loaded
-            setTimeout(() => {
-                if (notificationState.appId) {
-                    initOneSignal();
-                } else {
-                    updateNotificationUI();
-                }
-            }, 500);
-        });
     </script>
 </body>
 </html>
