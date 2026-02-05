@@ -4,8 +4,8 @@
     "description": "Taakverdeling en kookplanning voor thuis",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#F8FAFC",
-    "theme_color": "#1B4D5C",
+    "background_color": "#FDF8F3",
+    "theme_color": "#8B7355",
     "orientation": "portrait",
     "icons": [
         {
