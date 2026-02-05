@@ -745,10 +745,15 @@
                 <div class="greeting" id="vandaagGreeting">Goedemorgen!</div>
             </div>
 
+            <div class="person-toggle" id="vandaagPersonToggle">
+                <button class="person-btn rowan active" data-person="rowan" onclick="selectVandaagPerson('rowan')">👤 Rowan</button>
+                <button class="person-btn jamie" data-person="jamie" onclick="selectVandaagPerson('jamie')">👤 Jamie-Lee</button>
+            </div>
+
             <div class="vandaag-section">
                 <div class="vandaag-section-header">
                     <span class="icon">✅</span>
-                    <h2>Jouw taken vandaag</h2>
+                    <h2 id="vandaagTasksTitle">Taken vandaag</h2>
                     <span class="badge" id="taskProgress">0/0</span>
                 </div>
                 <div id="vandaagTasks">
@@ -1187,6 +1192,17 @@
             document.getElementById('vandaagDate').textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
             document.getElementById('vandaagGreeting').textContent = greeting;
             
+            // Update person toggle to reflect current selection
+            const toggleContainer = document.getElementById('vandaagPersonToggle');
+            if (toggleContainer) {
+                toggleContainer.querySelectorAll('.person-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.person === state.currentPerson) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+            
             // Render today's tasks
             renderVandaagTasks(dayName);
             
@@ -1301,6 +1317,32 @@
             state.completedTasks[taskId] = !state.completedTasks[taskId];
             localStorage.setItem('completedTasks', JSON.stringify(state.completedTasks));
             
+            const today = new Date();
+            const dayName = today.toLocaleDateString('nl-NL', { weekday: 'long' });
+            renderVandaagTasks(dayName);
+        }
+
+        function selectVandaagPerson(person) {
+            state.currentPerson = person;
+            
+            // Update toggle UI
+            const toggleContainer = document.getElementById('vandaagPersonToggle');
+            toggleContainer.querySelectorAll('.person-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.person === person) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Also update the Taken tab toggle to stay in sync
+            document.querySelectorAll('.person-toggle .person-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.person === person) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Re-render tasks
             const today = new Date();
             const dayName = today.toLocaleDateString('nl-NL', { weekday: 'long' });
             renderVandaagTasks(dayName);
