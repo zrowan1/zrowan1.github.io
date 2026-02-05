@@ -153,6 +153,8 @@ Nu krijg je elke ochtend een melding en opent de app direct naar je taken van va
 ## 🔄 Hoe werkt de synchronisatie?
 
 - **Automatisch bij openen**: Elke keer dat je de app opent, haalt hij verse data
+- **Automatische week-detectie**: De app selecteert automatisch de juiste week op basis van vandaag
+- **Wekelijkse reset**: Afgevinkte taken van vorige weken worden automatisch opgeruimd
 - **Offline modus**: De app onthoudt de laatste data, dus werkt ook zonder internet
 - **Taken afvinken**: Dit wordt lokaal opgeslagen op je telefoon
 

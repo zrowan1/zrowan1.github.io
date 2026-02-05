@@ -982,10 +982,141 @@
                     updateSyncStatus('error', 'Geen data gevonden');
                 }
                 
+                // Auto-detect current week and cleanup old tasks
+                detectCurrentWeek();
+                cleanupOldCompletedTasks();
+                
                 renderCurrentTab();
             } catch (error) {
                 console.error('Sync error:', error);
                 updateSyncStatus('error', 'Sync mislukt');
+            }
+        }
+
+        // ==================== WEEK DETECTION & CLEANUP ====================
+        function parseWeekRange(rangeStr) {
+            // Parse "02-02 t/m 08-02" or "30-12 t/m 05-01" format
+            const match = rangeStr.match(/(\d{2})-(\d{2})\s*t\/m\s*(\d{2})-(\d{2})/);
+            if (!match) return null;
+            
+            const startDay = parseInt(match[1]);
+            const startMonth = parseInt(match[2]);
+            const endDay = parseInt(match[3]);
+            const endMonth = parseInt(match[4]);
+            
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            
+            // Determine year for start date
+            let startYear = currentYear;
+            let endYear = currentYear;
+            
+            // Handle year boundary (e.g., "30-12 t/m 05-01")
+            if (endMonth < startMonth) {
+                // If we're currently in the early months, start was last year
+                if (today.getMonth() + 1 <= 6) {
+                    startYear = currentYear - 1;
+                } else {
+                    // If we're in later months, end is next year
+                    endYear = currentYear + 1;
+                }
+            }
+            
+            const startDate = new Date(startYear, startMonth - 1, startDay, 0, 0, 0);
+            const endDate = new Date(endYear, endMonth - 1, endDay, 23, 59, 59);
+            
+            return { start: startDate, end: endDate, range: rangeStr };
+        }
+
+        function detectCurrentWeek() {
+            if (!state.data.verdeling || state.data.verdeling.length === 0) return;
+            
+            const today = new Date();
+            today.setHours(12, 0, 0, 0); // Normalize to midday
+            
+            let foundWeek = -1;
+            
+            for (let i = 0; i < state.data.verdeling.length; i++) {
+                const week = state.data.verdeling[i];
+                const parsed = parseWeekRange(week.range);
+                
+                if (parsed && today >= parsed.start && today <= parsed.end) {
+                    foundWeek = i;
+                    break;
+                }
+            }
+            
+            // If found a matching week, update state
+            if (foundWeek !== -1) {
+                state.currentWeek = foundWeek;
+                state.currentCookWeek = foundWeek;
+                console.log(`Auto-detected week ${foundWeek + 1}: ${state.data.verdeling[foundWeek].range}`);
+            } else {
+                // If no match, try to find the closest upcoming week
+                let closestWeek = 0;
+                let closestDiff = Infinity;
+                
+                for (let i = 0; i < state.data.verdeling.length; i++) {
+                    const week = state.data.verdeling[i];
+                    const parsed = parseWeekRange(week.range);
+                    
+                    if (parsed) {
+                        const diff = Math.abs(today - parsed.start);
+                        if (diff < closestDiff) {
+                            closestDiff = diff;
+                            closestWeek = i;
+                        }
+                    }
+                }
+                
+                state.currentWeek = closestWeek;
+                state.currentCookWeek = closestWeek;
+                console.log(`No exact match, using closest week ${closestWeek + 1}`);
+            }
+        }
+
+        function cleanupOldCompletedTasks() {
+            if (!state.data.verdeling || state.data.verdeling.length === 0) return;
+            
+            const currentWeekRange = state.data.verdeling[state.currentWeek]?.range;
+            if (!currentWeekRange) return;
+            
+            // Get all valid week ranges
+            const validRanges = new Set(state.data.verdeling.map(w => w.range));
+            
+            // Find and remove tasks from weeks that no longer exist in the data
+            // or are older than the current week
+            const keysToRemove = [];
+            const currentParsed = parseWeekRange(currentWeekRange);
+            
+            for (const taskId in state.completedTasks) {
+                // Extract week range from task ID (format: "range-person-day-task")
+                const parts = taskId.split('-');
+                if (parts.length >= 4) {
+                    // Reconstruct the week range (e.g., "02-02 t/m 08-02")
+                    const taskWeekRange = `${parts[0]}-${parts[1]} t/m ${parts[2]}-${parts[3]}`;
+                    
+                    // Check if this week still exists
+                    if (!validRanges.has(taskWeekRange)) {
+                        keysToRemove.push(taskId);
+                        continue;
+                    }
+                    
+                    // Check if this week is older than current week
+                    if (currentParsed) {
+                        const taskParsed = parseWeekRange(taskWeekRange);
+                        if (taskParsed && taskParsed.end < currentParsed.start) {
+                            keysToRemove.push(taskId);
+                        }
+                    }
+                }
+            }
+            
+            // Remove old tasks
+            if (keysToRemove.length > 0) {
+                keysToRemove.forEach(key => delete state.completedTasks[key]);
+                localStorage.setItem('completedTasks', JSON.stringify(state.completedTasks));
+                console.log(`Cleaned up ${keysToRemove.length} old completed tasks`);
             }
         }
 
@@ -1517,6 +1648,9 @@
             
             // Render cached data first
             if (state.data.verdeling || state.data.koken || state.data.tasks) {
+                // Detect current week based on cached data
+                detectCurrentWeek();
+                cleanupOldCompletedTasks();
                 renderCurrentTab();
             }
             
