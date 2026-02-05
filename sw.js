@@ -8,7 +8,7 @@ const ASSETS = [
     'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap'
 ];
 
-// Install event
+// Install - cache assets
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
@@ -17,37 +17,38 @@ self.addEventListener('install', event => {
     );
 });
 
-// Activate event
+// Activate - clean old caches
 self.addEventListener('activate', event => {
     event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames
-                    .filter(name => name !== CACHE_NAME)
-                    .map(name => caches.delete(name))
-            );
-        }).then(() => self.clients.claim())
+        caches.keys().then(keys => 
+            Promise.all(keys
+                .filter(key => key !== CACHE_NAME)
+                .map(key => caches.delete(key))
+            )
+        ).then(() => self.clients.claim())
     );
 });
 
-// Fetch event - Network first, fallback to cache
+// Fetch - network first, then cache
 self.addEventListener('fetch', event => {
     // Skip non-GET requests
     if (event.request.method !== 'GET') return;
     
-    // Skip Google Sheets API calls (always network)
+    // For Google Sheets API - always network
     if (event.request.url.includes('docs.google.com')) {
         event.respondWith(fetch(event.request));
         return;
     }
     
+    // For other requests - network first, fallback to cache
     event.respondWith(
         fetch(event.request)
             .then(response => {
-                // Clone the response before caching
-                const responseClone = response.clone();
-                caches.open(CACHE_NAME)
-                    .then(cache => cache.put(event.request, responseClone));
+                // Clone and cache the response
+                const clone = response.clone();
+                caches.open(CACHE_NAME).then(cache => {
+                    cache.put(event.request, clone);
+                });
                 return response;
             })
             .catch(() => caches.match(event.request))

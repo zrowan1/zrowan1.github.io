@@ -1,72 +1,181 @@
-# 🏠 Huishouden App - Warm Home Edition
+# 🏠 Huishouden App - Setup Handleiding
 
-Een warme, gezellige app om je huishoudelijke taken en kookplanning bij te houden, gekoppeld aan Google Sheets.
-
-## ✨ Wat is nieuw in deze versie?
-
-- **Nieuw design**: Zachte aardtinten (beige, bruin, crème) voor een warme, huiselijke uitstraling
-- **Minimalistische SVG iconen**: Alle iconen zijn nu in hetzelfde kleurenschema
-- **Organische vormen**: Decoratieve blur-shapes op de achtergrond
-- **Verbeterde typografie**: Quicksand + Nunito fonts voor een vriendelijke look
+Een handige app om je huishoudelijke taken en kookplanning bij te houden, direct gekoppeld aan Google Sheets!
 
 ---
 
-## 📱 Installatie
+## 📱 Stap 1: Google Sheet Voorbereiden
 
-### Stap 1: Upload naar GitHub
+### 1.1 Maak een nieuwe Google Sheet aan
+Ga naar [Google Sheets](https://sheets.google.com) en maak een nieuw spreadsheet.
 
-1. Ga naar je repository: `github.com/zrowan1/zrowan1.github.io`
-2. Klik op **Add file** → **Upload files**
-3. Sleep alle bestanden uit de zip naar het upload venster:
-   - `index.html`
-   - `manifest.json`
-   - `sw.js`
-   - `icon-192.png`
-   - `icon-512.png`
-4. Scroll naar beneden en klik **Commit changes**
-5. Wacht ~1 minuut tot GitHub Pages updated
+### 1.2 Maak 3 tabbladen aan
+Je hebt **precies** deze 3 tabbladen nodig:
 
-### Stap 2: Ververs de app op je iPhone
+| Tabblad | Naam |
+|---------|------|
+| 1 | `Alle taken` |
+| 2 | `Taakverdeling` |
+| 3 | `Kookplanning` |
 
-1. Open Safari en ga naar je app URL
-2. Ververs de pagina (swipe naar beneden)
-3. Als je de app al op je homescreen hebt:
-   - Verwijder de oude app
-   - Open de URL opnieuw in Safari
-   - Deel → **Zet op beginscherm**
+> 💡 **Tip**: Als je vanuit Apple Numbers exporteert, krijgen sheets soms " - Tabel 1" achter de naam. De app herkent dit automatisch!
 
----
+### 1.3 Vul de tabbladen in
 
-## 🎨 Design kenmerken
+**Tabblad: Alle taken**
+```
+| Woonkamer   | Keuken    | WC           | Badkamer       | ...  |
+|-------------|-----------|--------------|----------------|------|
+| Stofzuigen  | Stofzuigen| Stofzuigen   | Stofzuigen     | ...  |
+| Dweilen     | Dweilen   | WC poetsen   | Douche poetsen | ...  |
+| Afstoffen   | Afstoffen | Wasbak       | Wasbak         | ...  |
+```
 
-| Element | Waarde |
-|---------|--------|
-| Achtergrond | `#FDF8F3` → `#F5EDE4` gradient |
-| Accent primair | `#8B7355` (warm bruin) |
-| Accent secundair | `#C7B299` (zacht beige) |
-| Tekst primair | `#5D4E3C` (donker bruin) |
-| Fonts | Quicksand, Nunito |
-| Hoeken | Groot (16-24px) voor organische look |
+**Tabblad: Taakverdeling**
+```
+| Rowan           |          |           |           |
+|-----------------|----------|-----------|-----------|
+| 02-02 t/m 08-02 | Maandag  | Dinsdag   | Woensdag  | ...
+|                 | Taak 1   | Taak 1    | Taak 1    |
+|                 | Taak 2   | Taak 2    |           |
+| Jamie-Lee       |          |           |           |
+| 02-02 t/m 08-02 | Maandag  | Dinsdag   | Woensdag  | ...
+|                 | Taak 1   | Taak 1    | Taak 1    |
+```
 
----
+**Tabblad: Kookplanning**
+```
+| Kookplanning    |          |            |           |
+|-----------------|----------|------------|-----------|
+| 02-02 t/m 08-02 | Dag      | Wie kookt  | Gerecht   |
+|                 | Maandag  | Rowan      |           |
+|                 | Dinsdag  | Jamie-Lee  | Pasta     |
+|                 | Woensdag | Rowan      | Curry     |
+```
 
-## 🔧 Bestanden in deze zip
+### 1.4 Publiceer de Sheet
+Dit is **heel belangrijk** - anders kan de app de data niet lezen!
+
+1. Ga naar **Bestand** → **Delen** → **Publiceren op internet**
+2. Kies "Gehele document"
+3. Kies "CSV" als formaat
+4. Klik op **Publiceren**
+5. Bevestig met **OK**
+
+### 1.5 Kopieer het Sheet ID
+Het Sheet ID vind je in de URL van je spreadsheet:
 
 ```
-huishoudapp-warm-home/
-├── index.html      # Hoofdbestand met alle code
-├── manifest.json   # PWA configuratie
-├── sw.js           # Service worker voor offline
-├── icon-192.png    # App icoon (klein)
-└── icon-512.png    # App icoon (groot)
+https://docs.google.com/spreadsheets/d/[DIT_IS_JE_SHEET_ID]/edit
 ```
+
+Bijvoorbeeld: `1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms`
+
+---
+
+## 🌐 Stap 2: App Online Zetten
+
+Je hebt een paar opties om de app te hosten:
+
+### Optie A: GitHub Pages (Gratis, Aanbevolen)
+
+1. Maak een account op [GitHub](https://github.com)
+2. Maak een nieuwe repository aan (bijv. `huishouden`)
+3. Upload alle bestanden uit deze map
+4. Ga naar **Settings** → **Pages**
+5. Kies **Source: main branch**
+6. Na een paar minuten is je app live op: `https://[username].github.io/huishouden`
+
+### Optie B: Netlify (Gratis, Makkelijk)
+
+1. Ga naar [Netlify Drop](https://app.netlify.com/drop)
+2. Sleep de hele map naar de pagina
+3. Je krijgt direct een URL!
+
+### Optie C: Lokaal testen
+
+Voor testen kun je een lokale server draaien:
+```bash
+cd huishoudapp
+python3 -m http.server 8000
+```
+Open dan: `http://localhost:8000`
+
+---
+
+## 📲 Stap 3: App Installeren op iPhone
+
+1. Open de app URL in **Safari**
+2. Tik op het **Deel-icoon** (vierkantje met pijl omhoog)
+3. Scroll naar beneden
+4. Tik op **"Zet op beginscherm"**
+5. Geef de app een naam en tik op **Voeg toe**
+
+De app verschijnt nu op je homescreen als een echte app! 🎉
+
+---
+
+## ⚙️ Stap 4: Sheet ID Invoeren
+
+1. Open de app
+2. Ga naar het **Setup** tabblad (tandwiel icoon)
+3. Plak je **Sheet ID**
+4. Tik op **Opslaan & Verbinden**
+
+De app haalt nu automatisch je data op!
+
+---
+
+## 🔔 Stap 5: Dagelijkse Herinnering (iOS Shortcut)
+
+Wil je elke ochtend herinnerd worden aan je taken? Maak een iOS Shortcut!
+
+### Zo maak je de herinnering:
+
+1. Open de **Shortcuts** app op je iPhone
+2. Ga naar **Automatisering** (onderaan)
+3. Tik op **+** → **Persoonlijke automatisering**
+4. Kies **Tijd van de dag**
+5. Stel je tijd in (bijv. **08:00**)
+6. Kies **Dagelijks**
+7. Tik **Volgende**
+8. Zoek en voeg toe: **Toon melding**
+9. Typ: `🏠 Vergeet je huishoudtaken niet!`
+10. Voeg toe: **Open app** → kies **Huishouden**
+11. Tik **Volgende**
+12. Zet **"Vraag bevestiging"** **UIT**
+13. Tik **Gereed**
+
+Nu krijg je elke ochtend een melding en opent de app direct naar je taken van vandaag! 📬
+
+---
+
+## 🔄 Hoe werkt de synchronisatie?
+
+- **Automatisch bij openen**: Elke keer dat je de app opent, haalt hij verse data
+- **Automatische week-detectie**: De app selecteert automatisch de juiste week op basis van vandaag
+- **Wekelijkse reset**: Afgevinkte taken van vorige weken worden automatisch opgeruimd
+- **Offline modus**: De app onthoudt de laatste data, dus werkt ook zonder internet
+- **Taken afvinken**: Dit wordt lokaal opgeslagen op je telefoon
 
 ---
 
 ## 💡 Tips
 
-- De app gebruikt dezelfde Google Sheet als voorheen
-- Je hoeft het Sheet ID niet opnieuw in te voeren (blijft bewaard)
-- Afgevinkte taken blijven ook bewaard
+- Pas de Google Sheet aan op je computer → Open de app → Data is bijgewerkt!
+- Deel de Sheet met Jamie-Lee zodat jullie beiden kunnen aanpassen
+- De app werkt ook op Android (zelfde stappen, via Chrome)
 
-Veel plezier met de nieuwe look! 🏠✨
+---
+
+## ❓ Problemen?
+
+| Probleem | Oplossing |
+|----------|-----------|
+| "Geen data" | Check of de Sheet is gepubliceerd |
+| Verkeerde data | Check de tabblad-namen (hoofdlettergevoelig!) |
+| App laadt niet | Probeer cache te legen in Safari |
+
+---
+
+Veel plezier met jullie huishoud-app! 🏠✨
