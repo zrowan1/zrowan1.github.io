@@ -1233,25 +1233,41 @@
         }
 
         async function loadSharedStatus() {
-            if (!state.scriptUrl) return;
+            if (!state.scriptUrl) {
+                console.log('ℹ️ Geen Script URL - alleen lokale opslag wordt gebruikt');
+                return;
+            }
             
             try {
+                console.log('🔄 Laden gedeelde status...');
                 const response = await fetch(state.scriptUrl + '?t=' + Date.now());
-                const data = await response.json();
                 
-                if (data.data && Array.isArray(data.data)) {
-                    // Merge with local status
+                if (!response.ok) {
+                    console.warn(`⚠️ Script response niet OK: ${response.status}`);
+                    return;
+                }
+                
+                const data = await response.json();
+                console.log('📥 Script response:', data);
+                
+                if (data.data && Array.isArray(data.data) && data.data.length > 0) {
+                    // Merge with local status - only update, don't delete local tasks
+                    console.log(`📝 Mergen van ${data.data.length} taken uit Sheet...`);
                     data.data.forEach(item => {
                         const taskId = `${item.week}-${item.person}-${item.day}-${item.task}`;
                         state.completedTasks[taskId] = item.completed;
                     });
                     
                     localStorage.setItem('completedTasks', JSON.stringify(state.completedTasks));
-                    console.log(`✅ Gedeelde status geladen (${data.data.length} taken)`);
+                    console.log(`✅ Gedeelde status geladen: ${Object.keys(state.completedTasks).length} totale taken`);
+                    updateSyncBadge('active');
+                } else {
+                    console.log('ℹ️ Geen gedeelde taken in Sheet - lokale data behouden');
                     updateSyncBadge('active');
                 }
             } catch (error) {
                 console.error('❌ Load shared status failed:', error);
+                console.log('ℹ️ Lokale data behouden na sync error');
             }
         }
 
@@ -1726,14 +1742,20 @@
         }
 
         async function toggleVandaagTask(taskId) {
+            console.log('🔘 Toggle taak:', taskId);
             const wasCompleted = state.completedTasks[taskId];
             state.completedTasks[taskId] = !wasCompleted;
+            console.log(`  └─ Status: ${wasCompleted} → ${!wasCompleted}`);
             
             // Save locally first (instant feedback)
             localStorage.setItem('completedTasks', JSON.stringify(state.completedTasks));
+            console.log('  └─ ✅ Opgeslagen in localStorage');
+            console.log(`  └─ Totaal: ${Object.keys(state.completedTasks).filter(k => state.completedTasks[k]).length} afgevinkte taken`);
             
-            // Sync to sheet in background
-            await syncTaskToSheet(taskId, !wasCompleted);
+            // Sync to sheet in background (only if script URL is set)
+            if (state.scriptUrl) {
+                await syncTaskToSheet(taskId, !wasCompleted);
+            }
             
             const today = new Date();
             const dayName = today.toLocaleDateString('nl-NL', { weekday: 'long' });
@@ -1882,14 +1904,20 @@
         }
 
         async function toggleTask(taskId) {
+            console.log('🔘 Toggle taak:', taskId);
             const wasCompleted = state.completedTasks[taskId];
             state.completedTasks[taskId] = !wasCompleted;
+            console.log(`  └─ Status: ${wasCompleted} → ${!wasCompleted}`);
             
             // Save locally first (instant feedback)
             localStorage.setItem('completedTasks', JSON.stringify(state.completedTasks));
+            console.log('  └─ ✅ Opgeslagen in localStorage');
+            console.log(`  └─ Totaal: ${Object.keys(state.completedTasks).filter(k => state.completedTasks[k]).length} afgevinkte taken`);
             
-            // Sync to sheet in background
-            await syncTaskToSheet(taskId, !wasCompleted);
+            // Sync to sheet in background (only if script URL is set)
+            if (state.scriptUrl) {
+                await syncTaskToSheet(taskId, !wasCompleted);
+            }
             
             renderVerdeling();
         }
@@ -2008,6 +2036,13 @@
 
         // ==================== INIT ====================
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 App geladen');
+            console.log('📊 State bij laden:');
+            console.log('  - sheetId:', state.sheetId ? 'Ja' : 'Nee');
+            console.log('  - scriptUrl:', state.scriptUrl ? 'Ja' : 'Nee');
+            console.log('  - Afgevinkte taken:', Object.keys(state.completedTasks).filter(k => state.completedTasks[k]).length);
+            console.log('  - Totale taken in state:', Object.keys(state.completedTasks).length);
+            
             // Initialize preferences (dark mode, etc.)
             initPreferences();
             
@@ -2018,14 +2053,18 @@
             
             // Render cached data first
             if (state.data.verdeling || state.data.koken || state.data.tasks) {
+                console.log('📋 Cached data gevonden - renderen...');
                 // Detect current week based on cached data
                 detectCurrentWeek();
+                console.log('🗓️ Huidige week:', state.currentWeek);
                 cleanupOldCompletedTasks();
+                console.log('🧹 Na cleanup - Afgevinkte taken:', Object.keys(state.completedTasks).filter(k => state.completedTasks[k]).length);
                 renderCurrentTab();
             }
             
             // Then sync fresh data
             if (state.sheetId) {
+                console.log('🔄 Starten sync met Google Sheets...');
                 syncData();
             } else {
                 updateSyncStatus('error', 'Geen Sheet ID');
