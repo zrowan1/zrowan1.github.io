@@ -834,6 +834,32 @@
         .toggle-switch.active::after {
             transform: translateX(22px);
         }
+
+        /* Sync badge */
+        .sync-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            background: var(--light-green);
+            color: var(--green);
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .sync-badge.syncing {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .sync-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
     </style>
 </head>
 <body>
@@ -966,6 +992,28 @@
                 </p>
             </div>
 
+            <div class="card settings-card">
+                <div class="card-header">
+                    <span class="icon">🔄</span>
+                    <h2>Gedeelde Taken-Status</h2>
+                    <span class="sync-badge" id="syncBadge" style="display: none;">
+                        <span class="dot"></span>
+                        <span>Actief</span>
+                    </span>
+                </div>
+                <p style="font-size: 14px; color: var(--med-text); margin-bottom: 12px;">
+                    Optioneel: Synchroniseer afgevinkte taken tussen jou en Jamie-Lee.
+                </p>
+                <input type="text" id="scriptUrlInput" placeholder="Apps Script URL (optioneel)" />
+                <button onclick="saveScriptUrl()">Opslaan Script URL</button>
+                <p class="help-text">
+                    💡 <strong>Hoe werkt dit?</strong><br>
+                    1. Deploy een Google Apps Script (zie handleiding)<br>
+                    2. Plak de Web App URL hier<br>
+                    3. Jullie taken worden nu gedeeld! 🎉
+                </p>
+            </div>
+
             <div class="card">
                 <div class="card-header">
                     <span class="icon">🎨</span>
@@ -1020,6 +1068,7 @@
         // ==================== STATE ====================
         let state = {
             sheetId: localStorage.getItem('sheetId') || '',
+            scriptUrl: localStorage.getItem('scriptUrl') || '',
             currentTab: 'vandaag',
             currentWeek: 0,
             currentCookWeek: 0,
@@ -1030,7 +1079,8 @@
                 koken: JSON.parse(localStorage.getItem('kokenData') || 'null')
             },
             completedTasks: JSON.parse(localStorage.getItem('completedTasks') || '{}'),
-            lastSync: localStorage.getItem('lastSync') || null
+            lastSync: localStorage.getItem('lastSync') || null,
+            isSyncing: false
         };
 
         // ==================== GOOGLE SHEETS ====================
@@ -1132,10 +1182,95 @@
                 detectCurrentWeek();
                 cleanupOldCompletedTasks();
                 
+                // Load shared task status
+                await loadSharedStatus();
+                
                 renderCurrentTab();
             } catch (error) {
                 console.error('Sync error:', error);
                 updateSyncStatus('error', 'Sync mislukt');
+            }
+        }
+
+        // ==================== SHARED TASK STATUS ====================
+        async function syncTaskToSheet(taskId, completed) {
+            if (!state.scriptUrl || state.isSyncing) return;
+            
+            // Parse taskId: "03-02 t/m 09-02-rowan-Maandag-Stofzuigen"
+            const parts = taskId.split('-');
+            if (parts.length < 6) return;
+            
+            const week = `${parts[0]}-${parts[1]} t/m ${parts[2]}-${parts[3]}`;
+            const person = parts[4];
+            const day = parts[5];
+            const task = parts.slice(6).join('-');
+            
+            state.isSyncing = true;
+            updateSyncBadge('syncing');
+            
+            try {
+                await fetch(state.scriptUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        week: week,
+                        person: person,
+                        day: day,
+                        task: task,
+                        completed: completed
+                    })
+                });
+                
+                console.log('✅ Taak gesynchroniseerd naar Sheet');
+                updateSyncBadge('active');
+            } catch (error) {
+                console.error('❌ Sync to sheet failed:', error);
+                updateSyncBadge('active');
+            } finally {
+                state.isSyncing = false;
+            }
+        }
+
+        async function loadSharedStatus() {
+            if (!state.scriptUrl) return;
+            
+            try {
+                const response = await fetch(state.scriptUrl + '?t=' + Date.now());
+                const data = await response.json();
+                
+                if (data.data && Array.isArray(data.data)) {
+                    // Merge with local status
+                    data.data.forEach(item => {
+                        const taskId = `${item.week}-${item.person}-${item.day}-${item.task}`;
+                        state.completedTasks[taskId] = item.completed;
+                    });
+                    
+                    localStorage.setItem('completedTasks', JSON.stringify(state.completedTasks));
+                    console.log(`✅ Gedeelde status geladen (${data.data.length} taken)`);
+                    updateSyncBadge('active');
+                }
+            } catch (error) {
+                console.error('❌ Load shared status failed:', error);
+            }
+        }
+
+        function updateSyncBadge(status) {
+            const badge = document.getElementById('syncBadge');
+            if (!badge) return;
+            
+            if (state.scriptUrl) {
+                badge.style.display = 'inline-flex';
+                badge.className = 'sync-badge';
+                
+                if (status === 'syncing') {
+                    badge.classList.add('syncing');
+                    badge.querySelector('span:last-child').textContent = 'Bezig...';
+                } else {
+                    badge.querySelector('span:last-child').textContent = 'Actief';
+                }
+            } else {
+                badge.style.display = 'none';
             }
         }
 
@@ -1590,9 +1725,15 @@
             `;
         }
 
-        function toggleVandaagTask(taskId) {
-            state.completedTasks[taskId] = !state.completedTasks[taskId];
+        async function toggleVandaagTask(taskId) {
+            const wasCompleted = state.completedTasks[taskId];
+            state.completedTasks[taskId] = !wasCompleted;
+            
+            // Save locally first (instant feedback)
             localStorage.setItem('completedTasks', JSON.stringify(state.completedTasks));
+            
+            // Sync to sheet in background
+            await syncTaskToSheet(taskId, !wasCompleted);
             
             const today = new Date();
             const dayName = today.toLocaleDateString('nl-NL', { weekday: 'long' });
@@ -1740,9 +1881,16 @@
             renderKoken();
         }
 
-        function toggleTask(taskId) {
-            state.completedTasks[taskId] = !state.completedTasks[taskId];
+        async function toggleTask(taskId) {
+            const wasCompleted = state.completedTasks[taskId];
+            state.completedTasks[taskId] = !wasCompleted;
+            
+            // Save locally first (instant feedback)
             localStorage.setItem('completedTasks', JSON.stringify(state.completedTasks));
+            
+            // Sync to sheet in background
+            await syncTaskToSheet(taskId, !wasCompleted);
+            
             renderVerdeling();
         }
 
@@ -1759,6 +1907,21 @@
             localStorage.setItem('sheetId', id);
             
             syncData();
+        }
+
+        function saveScriptUrl() {
+            const input = document.getElementById('scriptUrlInput');
+            const url = input.value.trim();
+            
+            state.scriptUrl = url;
+            localStorage.setItem('scriptUrl', url);
+            
+            if (url) {
+                updateSyncBadge('active');
+                loadSharedStatus(); // Load immediately
+            } else {
+                updateSyncBadge('inactive');
+            }
         }
 
         // Tab navigation
@@ -1804,6 +1967,15 @@
             } else {
                 if (tipToggle) tipToggle.classList.add('active');
             }
+            
+            // Script URL input
+            const scriptUrlInput = document.getElementById('scriptUrlInput');
+            if (scriptUrlInput && state.scriptUrl) {
+                scriptUrlInput.value = state.scriptUrl;
+            }
+            
+            // Update sync badge
+            updateSyncBadge(state.scriptUrl ? 'active' : 'inactive');
         }
 
         function toggleDarkMode() {
