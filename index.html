@@ -1014,6 +1014,16 @@
                 </p>
             </div>
 
+            <div class="card" style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border: 1px dashed #F59E0B;">
+                <div class="card-header">
+                    <span class="icon">🔍</span>
+                    <h2>Debug Info</h2>
+                </div>
+                <button onclick="showDebugInfo()" style="width: 100%; padding: 12px; background: #F59E0B; color: white; border: none; border-radius: 8px; font-weight: 600; margin-bottom: 8px;">Toon LocalStorage Info</button>
+                <button onclick="clearAllTasks()" style="width: 100%; padding: 12px; background: #DC2626; color: white; border: none; border-radius: 8px; font-weight: 600;">Reset Alle Afgevinkte Taken</button>
+                <div id="debugInfo" style="margin-top: 12px; font-size: 13px; color: #92400E; display: none;"></div>
+            </div>
+
             <div class="card">
                 <div class="card-header">
                     <span class="icon">🎨</span>
@@ -1373,6 +1383,12 @@
         }
 
         function cleanupOldCompletedTasks() {
+            // ⚠️ TIJDELIJK UITGESCHAKELD VOOR DEBUG
+            console.log('🧹 Cleanup is tijdelijk uitgeschakeld');
+            console.log('📊 Taken behouden:', Object.keys(state.completedTasks).filter(k => state.completedTasks[k]).length);
+            return;
+            
+            /* ORIGINELE CODE (uitgeschakeld):
             if (!state.data.verdeling || state.data.verdeling.length === 0) return;
             
             const currentWeekRange = state.data.verdeling[state.currentWeek]?.range;
@@ -1415,6 +1431,7 @@
                 localStorage.setItem('completedTasks', JSON.stringify(state.completedTasks));
                 console.log(`Cleaned up ${keysToRemove.length} old completed tasks`);
             }
+            */
         }
 
         function parseVerdeling(data) {
@@ -2031,6 +2048,51 @@
             
             if (tipEl) {
                 tipEl.style.display = isShowing ? 'block' : 'none';
+            }
+        }
+
+        // ==================== DEBUG FUNCTIONS ====================
+        function showDebugInfo() {
+            const debugDiv = document.getElementById('debugInfo');
+            const completedCount = Object.keys(state.completedTasks).filter(k => state.completedTasks[k]).length;
+            const totalCount = Object.keys(state.completedTasks).length;
+            
+            const localStorageData = localStorage.getItem('completedTasks');
+            const parsedData = localStorageData ? JSON.parse(localStorageData) : {};
+            const localCount = Object.keys(parsedData).filter(k => parsedData[k]).length;
+            
+            let html = `
+                <strong>📊 State Info:</strong><br>
+                • Afgevinkte taken in memory: ${completedCount}<br>
+                • Totale taken in memory: ${totalCount}<br>
+                • Afgevinkte taken in localStorage: ${localCount}<br>
+                • Sheet ID: ${state.sheetId ? '✅ Ja' : '❌ Nee'}<br>
+                • Script URL: ${state.scriptUrl ? '✅ Ja' : '❌ Nee'}<br>
+                • Huidige week: ${state.currentWeek + 1}<br>
+                <br>
+                <strong>🔑 Voorbeeld taken IDs:</strong><br>
+            `;
+            
+            const sampleTasks = Object.keys(state.completedTasks).slice(0, 3);
+            if (sampleTasks.length > 0) {
+                sampleTasks.forEach(taskId => {
+                    html += `• ${taskId}: ${state.completedTasks[taskId] ? '✅' : '⬜'}<br>`;
+                });
+            } else {
+                html += '• Geen taken gevonden<br>';
+            }
+            
+            debugDiv.innerHTML = html;
+            debugDiv.style.display = 'block';
+        }
+
+        function clearAllTasks() {
+            if (confirm('⚠️ Weet je zeker dat je alle afgevinkte taken wilt resetten?\n\nDit verwijdert alle lokale data. De Google Sheet blijft intact.')) {
+                state.completedTasks = {};
+                localStorage.setItem('completedTasks', JSON.stringify({}));
+                console.log('🗑️ Alle afgevinkte taken gewist');
+                alert('✅ Alle afgevinkte taken zijn gereset!');
+                renderCurrentTab();
             }
         }
 
