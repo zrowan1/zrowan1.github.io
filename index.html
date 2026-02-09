@@ -1006,12 +1006,15 @@
                 </p>
                 <input type="text" id="scriptUrlInput" placeholder="Apps Script URL (optioneel)" />
                 <button onclick="saveScriptUrl()">Opslaan Script URL</button>
+                <button onclick="testScriptConnection()" style="background: #F59E0B; margin-top: 8px;">🧪 Test Connectie</button>
                 <p class="help-text">
                     💡 <strong>Hoe werkt dit?</strong><br>
                     1. Deploy een Google Apps Script (zie handleiding)<br>
                     2. Plak de Web App URL hier<br>
-                    3. Jullie taken worden nu gedeeld! 🎉
+                    3. Klik "Test Connectie" om te checken of het werkt<br>
+                    4. Jullie taken worden nu gedeeld! 🎉
                 </p>
+                <div id="testResult" style="margin-top: 12px; padding: 12px; border-radius: 8px; display: none;"></div>
             </div>
 
             <div class="card" style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border: 1px dashed #F59E0B;">
@@ -1208,34 +1211,56 @@
             
             // Parse taskId: "03-02 t/m 09-02-rowan-Maandag-Stofzuigen"
             const parts = taskId.split('-');
-            if (parts.length < 6) return;
+            if (parts.length < 6) {
+                console.warn('⚠️ Ongeldige taskId format:', taskId);
+                return;
+            }
             
             const week = `${parts[0]}-${parts[1]} t/m ${parts[2]}-${parts[3]}`;
             const person = parts[4];
             const day = parts[5];
             const task = parts.slice(6).join('-');
             
+            const payload = {
+                week: week,
+                person: person,
+                day: day,
+                task: task,
+                completed: completed
+            };
+            
             state.isSyncing = true;
             updateSyncBadge('syncing');
             
+            console.log('📤 Sync naar Sheet:', payload);
+            
             try {
-                await fetch(state.scriptUrl, {
+                const response = await fetch(state.scriptUrl, {
                     method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        week: week,
-                        person: person,
-                        day: day,
-                        task: task,
-                        completed: completed
-                    })
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload),
+                    mode: 'cors'  // Changed from no-cors to see actual errors
                 });
                 
-                console.log('✅ Taak gesynchroniseerd naar Sheet');
-                updateSyncBadge('active');
+                console.log('  └─ Response status:', response.status);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('  └─ ✅ Taak gesynchroniseerd naar Sheet');
+                    console.log('  └─ Response:', data);
+                    updateSyncBadge('active');
+                } else {
+                    console.error('  └─ ❌ Sync failed - Status:', response.status);
+                    updateSyncBadge('active');
+                }
             } catch (error) {
-                console.error('❌ Sync to sheet failed:', error);
+                console.error('  └─ ❌ Sync error:', error);
+                console.error('  └─ Dit kan betekenen:');
+                console.error('     - CORS policy blokkeert de request');
+                console.error('     - Apps Script is niet bereikbaar');
+                console.error('     - URL is onjuist');
                 updateSyncBadge('active');
             } finally {
                 state.isSyncing = false;
@@ -2048,6 +2073,93 @@
             
             if (tipEl) {
                 tipEl.style.display = isShowing ? 'block' : 'none';
+            }
+        }
+
+        async function testScriptConnection() {
+            const resultDiv = document.getElementById('testResult');
+            if (!state.scriptUrl) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.background = '#FEE2E2';
+                resultDiv.style.color = '#991B1B';
+                resultDiv.innerHTML = '❌ Geen Script URL ingesteld. Plak eerst je Apps Script URL hierboven.';
+                return;
+            }
+            
+            resultDiv.style.display = 'block';
+            resultDiv.style.background = '#FEF3C7';
+            resultDiv.style.color = '#92400E';
+            resultDiv.innerHTML = '⏳ Connectie testen...';
+            
+            console.log('🧪 Test Apps Script connectie:', state.scriptUrl);
+            
+            // Test 1: GET request (load data)
+            try {
+                console.log('📥 Test 1: GET request...');
+                const getResponse = await fetch(state.scriptUrl + '?t=' + Date.now());
+                console.log('  └─ Response status:', getResponse.status);
+                console.log('  └─ Response OK:', getResponse.ok);
+                
+                const getData = await getResponse.json();
+                console.log('  └─ Data ontvangen:', getData);
+                
+                if (getData.data) {
+                    resultDiv.style.background = '#D1FAE5';
+                    resultDiv.style.color = '#065F46';
+                    resultDiv.innerHTML = `✅ <strong>GET werkt!</strong><br>Ontvangen: ${getData.data.length} taken uit Sheet<br><br>Nu test POST...`;
+                } else {
+                    resultDiv.innerHTML = `⚠️ <strong>GET werkt deels</strong><br>Response ontvangen maar geen data array.<br>Response: ${JSON.stringify(getData)}<br><br>Nu test POST...`;
+                }
+            } catch (error) {
+                console.error('❌ GET error:', error);
+                resultDiv.style.background = '#FEE2E2';
+                resultDiv.style.color = '#991B1B';
+                resultDiv.innerHTML = `❌ <strong>GET mislukt</strong><br>Error: ${error.message}<br><br>Check of de Script URL klopt.`;
+                return;
+            }
+            
+            // Wait 1 second
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Test 2: POST request (save data)
+            try {
+                console.log('📤 Test 2: POST request...');
+                const testData = {
+                    week: '03-02 t/m 09-02',
+                    person: 'test',
+                    day: 'Test',
+                    task: 'Test taak van ' + new Date().toLocaleTimeString(),
+                    completed: true
+                };
+                console.log('  └─ Test data:', testData);
+                
+                const postResponse = await fetch(state.scriptUrl, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData),
+                    mode: 'cors'  // Changed from no-cors to see errors
+                });
+                
+                console.log('  └─ POST status:', postResponse.status);
+                console.log('  └─ POST OK:', postResponse.ok);
+                
+                if (postResponse.ok) {
+                    const postData = await postResponse.json();
+                    console.log('  └─ POST response:', postData);
+                    
+                    resultDiv.style.background = '#D1FAE5';
+                    resultDiv.style.color = '#065F46';
+                    resultDiv.innerHTML = `✅ <strong>Volledige test GESLAAGD!</strong><br><br>GET: ✅ Werkt<br>POST: ✅ Werkt<br><br>Open je Google Sheet en check het "Status" tabblad - daar zou een test-rij moeten staan!`;
+                } else {
+                    throw new Error(`Status ${postResponse.status}`);
+                }
+            } catch (error) {
+                console.error('❌ POST error:', error);
+                resultDiv.style.background = '#FEE2E2';
+                resultDiv.style.color = '#991B1B';
+                resultDiv.innerHTML = `⚠️ <strong>GET werkt, maar POST mislukt</strong><br><br>GET: ✅<br>POST: ❌ ${error.message}<br><br><strong>Mogelijke oorzaken:</strong><br>1. Apps Script heeft geen POST permissies<br>2. "Who has access" is niet op "Anyone"<br>3. doPost() functie mist in script<br><br><strong>Oplossing:</strong><br>Ga naar Apps Script → Deploy → Manage deployments → Edit → Check "Anyone" → Update`;
             }
         }
 
