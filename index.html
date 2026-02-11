@@ -860,6 +860,39 @@
             border-radius: 50%;
             background: currentColor;
         }
+
+        /* Sync toast notification */
+        .sync-toast {
+            position: fixed;
+            top: calc(var(--safe-top) + 80px);
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .sync-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Last sync indicator */
+        .last-sync {
+            font-size: 12px;
+            color: var(--light-text);
+            text-align: center;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body>
@@ -1007,12 +1040,19 @@
                 <input type="text" id="scriptUrlInput" placeholder="Apps Script URL (optioneel)" />
                 <button onclick="saveScriptUrl()">Opslaan Script URL</button>
                 <button onclick="testScriptConnection()" style="background: #F59E0B; margin-top: 8px;">🧪 Test Connectie</button>
+                <button onclick="manualSync()" style="background: #10B981; margin-top: 8px;">🔄 Sync Nu</button>
+                <div id="lastSyncTime" class="last-sync"></div>
                 <p class="help-text">
                     💡 <strong>Hoe werkt dit?</strong><br>
                     1. Deploy een Google Apps Script (zie handleiding)<br>
                     2. Plak de Web App URL hier<br>
                     3. Klik "Test Connectie" om te checken of het werkt<br>
-                    4. Jullie taken worden nu gedeeld! 🎉<br><br>
+                    4. Klik "Sync Nu" om handmatig te synchroniseren<br>
+                    5. Jullie taken worden automatisch gesynchroniseerd! 🎉<br><br>
+                    ⚡ <strong>Automatische sync:</strong> De app synchroniseert automatisch wanneer je:<br>
+                    • De app opent of naar de app terugkeert<br>
+                    • Een taak afvinkt (naar Sheet)<br>
+                    • De app refresht (pull down)<br><br>
                     ℹ️ <strong>Over sync:</strong> Door browser beveiliging (CORS) zie je geen bevestiging na afvinken, maar de taken worden WEL gesynchroniseerd. Check het "Status" tabblad in je Google Sheet om dit te verifiëren.
                 </p>
                 <div id="testResult" style="margin-top: 12px; padding: 12px; border-radius: 8px; display: none;"></div>
@@ -1310,20 +1350,40 @@
                 console.log('📥 Script response:', data);
                 
                 if (data.data && Array.isArray(data.data) && data.data.length > 0) {
-                    // Merge with local status - only update, don't delete local tasks
+                    // Merge with local status - track what changed
                     console.log(`📝 Mergen van ${data.data.length} taken uit Sheet...`);
                     let updatedCount = 0;
+                    let newFromOther = 0;
+                    
                     data.data.forEach(item => {
                         const taskId = `${item.week}-${item.person}-${item.day}-${item.task}`;
                         const wasCompleted = state.completedTasks[taskId];
-                        state.completedTasks[taskId] = item.completed;
+                        
+                        // Track if this is a change from the other person
                         if (wasCompleted !== item.completed) {
                             updatedCount++;
+                            // If the task belongs to the other person, it's a new update we should show
+                            if (item.person !== state.currentPerson) {
+                                newFromOther++;
+                            }
                         }
+                        
+                        state.completedTasks[taskId] = item.completed;
                     });
                     
                     localStorage.setItem('completedTasks', JSON.stringify(state.completedTasks));
-                    console.log(`✅ Gedeelde status geladen: ${Object.keys(state.completedTasks).length} totale taken (${updatedCount} updates van andere gebruiker)`);
+                    console.log(`✅ Gedeelde status geladen: ${Object.keys(state.completedTasks).length} totale taken (${updatedCount} updates)`);
+                    
+                    // Show notification if there are updates from the other person
+                    if (newFromOther > 0) {
+                        showSyncNotification(newFromOther);
+                    }
+                    
+                    // Update last sync time
+                    state.lastSync = new Date().toISOString();
+                    localStorage.setItem('lastSync', state.lastSync);
+                    updateLastSyncTime();
+                    
                     updateSyncBadge('active');
                 } else {
                     console.log('ℹ️ Geen gedeelde taken in Sheet - lokale data behouden');
@@ -1333,6 +1393,51 @@
                 console.error('❌ Load shared status failed:', error);
                 console.log('ℹ️ Lokale data behouden na sync error');
             }
+        }
+        
+        function showSyncNotification(count) {
+            const otherPerson = state.currentPerson === 'rowan' ? 'Jamie-Lee' : 'Rowan';
+            console.log(`🔔 ${count} nieuwe update(s) van ${otherPerson}`);
+            
+            // Create toast notification
+            const toast = document.createElement('div');
+            toast.className = 'sync-toast';
+            toast.innerHTML = `
+                <span style="font-size: 20px; margin-right: 8px;">✅</span>
+                <span><strong>${otherPerson}</strong> heeft ${count} ${count === 1 ? 'taak' : 'taken'} afgevinkt</span>
+            `;
+            document.body.appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        function updateLastSyncTime() {
+            const timeEl = document.getElementById('lastSyncTime');
+            if (!timeEl || !state.lastSync) return;
+            
+            const syncDate = new Date(state.lastSync);
+            const now = new Date();
+            const diffMs = now - syncDate;
+            const diffMins = Math.floor(diffMs / 60000);
+            
+            let timeText;
+            if (diffMins < 1) {
+                timeText = 'Net';
+            } else if (diffMins < 60) {
+                timeText = `${diffMins} min geleden`;
+            } else {
+                const hours = Math.floor(diffMins / 60);
+                timeText = `${hours} uur geleden`;
+            }
+            
+            timeEl.textContent = `Laatste sync: ${timeText}`;
         }
 
         function updateSyncBadge(status) {
@@ -2076,6 +2181,16 @@
             
             // Update sync badge
             updateSyncBadge(state.scriptUrl ? 'active' : 'inactive');
+            
+            // Show last sync time
+            updateLastSyncTime();
+            
+            // Update sync time every minute
+            setInterval(() => {
+                if (state.lastSync) {
+                    updateLastSyncTime();
+                }
+            }, 60000);
         }
 
         function toggleDarkMode() {
@@ -2193,6 +2308,37 @@
             }
         }
 
+        async function manualSync() {
+            if (!state.scriptUrl) {
+                alert('⚠️ Geen Script URL ingesteld.\n\nVoer eerst je Apps Script URL in om te kunnen synchroniseren.');
+                return;
+            }
+            
+            console.log('🔄 Handmatige sync gestart...');
+            updateSyncStatus('loading', 'Synchroniseren...');
+            
+            // Load shared status from sheet
+            await loadSharedStatus();
+            
+            // Re-render current view to show updates
+            renderCurrentTab();
+            
+            updateSyncStatus('success', 'Gesynchroniseerd');
+            
+            // Show feedback
+            const resultDiv = document.getElementById('testResult');
+            if (resultDiv) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.background = '#D1FAE5';
+                resultDiv.style.color = '#065F46';
+                resultDiv.innerHTML = '✅ <strong>Sync voltooid!</strong><br>Alle wijzigingen van je partner zijn nu zichtbaar.';
+                
+                setTimeout(() => {
+                    resultDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+
         // ==================== DEBUG FUNCTIONS ====================
         function showDebugInfo() {
             const debugDiv = document.getElementById('debugInfo');
@@ -2271,6 +2417,9 @@
             // Then sync fresh data
             if (state.sheetId) {
                 console.log('🔄 Starten sync met Google Sheets...');
+                if (state.scriptUrl) {
+                    console.log('   └─ Gedeelde status wordt ook geladen van Apps Script');
+                }
                 syncData();
             } else {
                 updateSyncStatus('error', 'Geen Sheet ID');
@@ -2280,6 +2429,7 @@
         // Sync on visibility change (when app becomes visible again)
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible' && state.sheetId) {
+                console.log('👁️ App weer zichtbaar - synchroniseren...');
                 syncData();
             }
         });
