@@ -1298,11 +1298,10 @@
                 return;
             }
             
-            
             const week = parts[0];     // "03-02 t/m 09-02"
             const person = parts[1];   // "rowan"
             const day = parts[2];      // "Maandag"
-            const task = parts[3];     // "Stofzuigen"
+            const task = parts[3];     // "Stofzuigen
             
             const payload = {
                 week: week,
@@ -1565,10 +1564,10 @@
             
             for (const taskId in state.completedTasks) {
                 // Extract week range from task ID (format: "week|person|day|task")
-                const parts = taskId.split('|');
+                const parts = taskId.split(\'|\');
                 if (parts.length >= 4) {
-                    // Reconstruct the week range (e.g., "02-02 t/m 08-02")
-                    const taskWeekRange = parts[0]; // Now simply the first part
+                    // Week range is simply the first part
+                    const taskWeekRange = parts[0];
                     
                     // Check if this week still exists
                     if (!validRanges.has(taskWeekRange)) {
@@ -2340,7 +2339,6 @@
             }
         }
 
-        // ==================== DEBUG FUNCTIONS ====================
         // ==================== MIGRATION ====================
         function migrateOldTaskIds() {
             console.log('🔄 Migratie check: oude taskId format naar nieuwe format...');
@@ -2389,8 +2387,8 @@
                 return false;
             }
         }
-        
 
+        // ==================== DEBUG FUNCTIONS ====================
         function showDebugInfo() {
             const debugDiv = document.getElementById('debugInfo');
             const completedCount = Object.keys(state.completedTasks).filter(k => state.completedTasks[k]).length;
@@ -2441,7 +2439,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Migrate old taskId format to new format
             migrateOldTaskIds();
-            
+
             console.log('ðŸš€ App geladen');
             console.log('ðŸ“Š State bij laden:');
             console.log('  - sheetId:', state.sheetId ? 'Ja' : 'Nee');
