@@ -933,19 +933,19 @@
             </div>
 
             <div class="person-toggle" id="vandaagPersonToggle">
-                <button class="person-btn rowan active" data-person="rowan" onclick="selectVandaagPerson('rowan')">ðŸ‘¤ Rowan</button>
-                <button class="person-btn jamie" data-person="jamie" onclick="selectVandaagPerson('jamie')">ðŸ‘¤ Jamie-Lee</button>
+                <button class="person-btn rowan active" data-person="rowan" onclick="selectVandaagPerson('rowan')">👤 Rowan</button>
+                <button class="person-btn jamie" data-person="jamie" onclick="selectVandaagPerson('jamie')">👤 Jamie-Lee</button>
             </div>
 
             <div class="vandaag-section">
                 <div class="vandaag-section-header">
-                    <span class="icon">âœ…</span>
+                    <span class="icon">✅</span>
                     <h2 id="vandaagTasksTitle">Taken vandaag</h2>
                     <span class="badge" id="taskProgress">0/0</span>
                 </div>
                 <div id="vandaagTasks">
                     <div class="vandaag-empty">
-                        <div class="icon">ðŸ“‹</div>
+                        <div class="icon">📋</div>
                         <p>Laden...</p>
                     </div>
                 </div>
@@ -956,25 +956,25 @@
 
             <div class="vandaag-section">
                 <div class="vandaag-section-header">
-                    <span class="icon">ðŸ³</span>
+                    <span class="icon">🍳</span>
                     <h2>Koken vandaag</h2>
                 </div>
                 <div id="vandaagKoken">
                     <div class="vandaag-empty">
-                        <div class="icon">ðŸ½ï¸</div>
+                        <div class="icon">🍽️</div>
                         <p>Laden...</p>
                     </div>
                 </div>
             </div>
 
             <div class="shortcut-tip" id="shortcutTip">
-                <button class="close-btn" onclick="hideShortcutTip()">Ã—</button>
+                <button class="close-btn" onclick="hideShortcutTip()">×</button>
                 <div class="tip-header">
-                    ðŸ’¡ Tip: Dagelijkse herinnering
+                    💡 Tip: Dagelijkse herinnering
                 </div>
                 <div class="tip-text">
                     Wil je elke ochtend een herinnering? Maak een iOS Shortcut:<br>
-                    <strong>Automatisering â†’ Tijd â†’ 08:00 â†’ Toon melding + Open app</strong>
+                    <strong>Automatisering → Tijd → 08:00 → Toon melding + Open app</strong>
                 </div>
             </div>
         </div>
@@ -984,8 +984,8 @@
             <div class="week-selector" id="weekSelector"></div>
             
             <div class="person-toggle">
-                <button class="person-btn rowan active" data-person="rowan">ðŸ‘¤ Rowan</button>
-                <button class="person-btn jamie" data-person="jamie">ðŸ‘¤ Jamie-Lee</button>
+                <button class="person-btn rowan active" data-person="rowan">👤 Rowan</button>
+                <button class="person-btn jamie" data-person="jamie">👤 Jamie-Lee</button>
             </div>
 
             <div id="taskList">
@@ -1019,7 +1019,7 @@
                 <input type="text" id="sheetIdInput" placeholder="Google Sheet ID (bijv. 1BxiM...)" />
                 <button onclick="saveSheetId()">Opslaan & Verbinden</button>
                 <p class="help-text">
-                    ðŸ“– <strong>Hoe vind je het Sheet ID?</strong><br>
+                    📖 <strong>Hoe vind je het Sheet ID?</strong><br>
                     Open je Google Sheet en kopieer het ID uit de URL:<br>
                     docs.google.com/spreadsheets/d/<strong>[DIT_IS_HET_ID]</strong>/edit
                 </p>
@@ -1039,28 +1039,28 @@
                 </p>
                 <input type="text" id="scriptUrlInput" placeholder="Apps Script URL (optioneel)" />
                 <button onclick="saveScriptUrl()">Opslaan Script URL</button>
-                <button onclick="testScriptConnection()" style="background: #F59E0B; margin-top: 8px;">ðŸ§ª Test Connectie</button>
-                <button onclick="manualSync()" style="background: #10B981; margin-top: 8px;">ðŸ”„ Sync Nu</button>
+                <button onclick="testScriptConnection()" style="background: #F59E0B; margin-top: 8px;">🧪 Test Connectie</button>
+                <button onclick="manualSync()" style="background: #10B981; margin-top: 8px;">🔄 Sync Nu</button>
                 <div id="lastSyncTime" class="last-sync"></div>
                 <p class="help-text">
-                    ðŸ’¡ <strong>Hoe werkt dit?</strong><br>
+                    💡 <strong>Hoe werkt dit?</strong><br>
                     1. Deploy een Google Apps Script (zie handleiding)<br>
                     2. Plak de Web App URL hier<br>
                     3. Klik "Test Connectie" om te checken of het werkt<br>
                     4. Klik "Sync Nu" om handmatig te synchroniseren<br>
-                    5. Jullie taken worden automatisch gesynchroniseerd! ðŸŽ‰<br><br>
-                    âš¡ <strong>Automatische sync:</strong> De app synchroniseert automatisch wanneer je:<br>
-                    â€¢ De app opent of naar de app terugkeert<br>
-                    â€¢ Een taak afvinkt (naar Sheet)<br>
-                    â€¢ De app refresht (pull down)<br><br>
-                    â„¹ï¸ <strong>Over sync:</strong> Door browser beveiliging (CORS) zie je geen bevestiging na afvinken, maar de taken worden WEL gesynchroniseerd. Check het "Status" tabblad in je Google Sheet om dit te verifiÃ«ren.
+                    5. Jullie taken worden automatisch gesynchroniseerd! 🎉<br><br>
+                    ⚡ <strong>Automatische sync:</strong> De app synchroniseert automatisch wanneer je:<br>
+                    • De app opent of naar de app terugkeert<br>
+                    • Een taak afvinkt (naar Sheet)<br>
+                    • De app refresht (pull down)<br><br>
+                    ℹ️ <strong>Over sync:</strong> Door browser beveiliging (CORS) zie je geen bevestiging na afvinken, maar de taken worden WEL gesynchroniseerd. Check het "Status" tabblad in je Google Sheet om dit te verifiëren.
                 </p>
                 <div id="testResult" style="margin-top: 12px; padding: 12px; border-radius: 8px; display: none;"></div>
             </div>
 
             <div class="card" style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border: 1px dashed #F59E0B;">
                 <div class="card-header">
-                    <span class="icon">ðŸ”</span>
+                    <span class="icon">🐛</span>
                     <h2>Debug Info</h2>
                 </div>
                 <button onclick="showDebugInfo()" style="width: 100%; padding: 12px; background: #F59E0B; color: white; border: none; border-radius: 8px; font-weight: 600; margin-bottom: 8px;">Toon LocalStorage Info</button>
@@ -1070,19 +1070,19 @@
 
             <div class="card">
                 <div class="card-header">
-                    <span class="icon">ðŸŽ¨</span>
+                    <span class="icon">🎨</span>
                     <h2>Weergave</h2>
                 </div>
                 <div class="dark-mode-toggle">
                     <div class="label">
-                        <span class="icon">ðŸŒ™</span>
+                        <span class="icon">🌙</span>
                         <span>Dark mode</span>
                     </div>
                     <div class="toggle-switch" id="darkModeToggle" onclick="toggleDarkMode()"></div>
                 </div>
                 <div class="dark-mode-toggle">
                     <div class="label">
-                        <span class="icon">ðŸ’¡</span>
+                        <span class="icon">💡</span>
                         <span>Toon Shortcut tip</span>
                     </div>
                     <div class="toggle-switch" id="shortcutTipToggle" onclick="toggleShortcutTipSetting()"></div>
@@ -1092,27 +1092,27 @@
             <div class="card">
                 <p style="font-size: 14px; color: var(--med-text); line-height: 1.6;">
                     <strong>Op iPhone:</strong><br>
-                    1. Tik op het deel-icoon (â–¡â†‘)<br>
+                    1. Tik op het deel-icoon (□↑)<br>
                     2. Scroll naar beneden<br>
                     3. Tik op "Zet op beginscherm"<br><br>
                     <strong>Op Android:</strong><br>
-                    1. Tik op de drie puntjes (â‹®)<br>
+                    1. Tik op de drie puntjes (⋮)<br>
                     2. Tik op "App installeren" of "Toevoegen aan startscherm"
                 </p>
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    <span class="icon">ðŸ“‹</span>
+                    <span class="icon">📋</span>
                     <h2>Google Sheet Setup</h2>
                 </div>
                 <p style="font-size: 14px; color: var(--med-text); line-height: 1.6;">
                     Zorg dat je Google Sheet <strong>3 tabbladen</strong> heeft:<br><br>
-                    1ï¸âƒ£ <strong>Alle taken</strong> - Kamer headers in rij 1<br>
-                    2ï¸âƒ£ <strong>Taakverdeling</strong> - Weken met taken<br>
-                    3ï¸âƒ£ <strong>Kookplanning</strong> - Wie kookt wanneer<br><br>
-                    âš ï¸ Vergeet niet de sheet te <strong>publiceren</strong>:<br>
-                    Bestand â†’ Delen â†’ Publiceren op internet â†’ CSV
+                    1️⃣ <strong>Alle taken</strong> - Kamer headers in rij 1<br>
+                    2️⃣ <strong>Taakverdeling</strong> - Weken met taken<br>
+                    3️⃣ <strong>Kookplanning</strong> - Wie kookt wanneer<br><br>
+                    ⚠️ Vergeet niet de sheet te <strong>publiceren</strong>:<br>
+                    Bestand → Delen → Publiceren op internet → CSV
                 </p>
             </div>
         </div>
@@ -1254,7 +1254,7 @@
             
             // Add to queue
             state.syncQueue.push({ taskId, completed, timestamp: Date.now() });
-            console.log(`ðŸ“¥ Toegevoegd aan sync queue (${state.syncQueue.length} in wachtrij)`);
+            console.log(`📥 Toegevoegd aan sync queue (${state.syncQueue.length} in wachtrij)`);
             
             // Process queue in background
             processNextInQueue();
@@ -1267,7 +1267,7 @@
             
             isProcessingQueue = true;
             const totalItems = state.syncQueue.length;
-            console.log(`ðŸ”„ Start verwerken sync queue (${totalItems} items)...`);
+            console.log(`🔄 Start verwerken sync queue (${totalItems} items)...`);
             updateSyncBadge('syncing');
             
             let processed = 0;
@@ -1285,7 +1285,7 @@
             
             isProcessingQueue = false;
             updateSyncBadge('active');
-            console.log(`âœ… Sync queue verwerkt (${processed}/${totalItems} items)`);
+            console.log(`✅ Sync queue verwerkt (${processed}/${totalItems} items)`);
         }
         
         async function syncTaskToSheet(taskId, completed) {
@@ -1294,7 +1294,7 @@
             // Parse taskId: "03-02 t/m 09-02|rowan|Maandag|Stofzuigen"
             const parts = taskId.split('|');
             if (parts.length < 4) {
-                console.warn('âš ï¸ Ongeldige taskId format:', taskId);
+                console.warn('⚠️ Ongeldige taskId format:', taskId);
                 return;
             }
             
@@ -1323,9 +1323,9 @@
                     mode: 'no-cors'
                 });
                 
-                console.log(`  â””â”€ âœ… "${task}" gesynchroniseerd`);
+                console.log(`    ↳ ✅ "${task}" gesynchroniseerd`);
             } catch (error) {
-                console.error(`  â””â”€ âŒ Sync failed voor "${task}":`, error);
+                console.error(`    ↳ ❌ Sync failed voor "${task}":`, error);
                 // Re-add to queue on error
                 state.syncQueue.push({ taskId, completed, timestamp: Date.now() });
             }
@@ -1333,25 +1333,25 @@
 
         async function loadSharedStatus() {
             if (!state.scriptUrl) {
-                console.log('â„¹ï¸ Geen Script URL - alleen lokale opslag wordt gebruikt');
+                console.log('ℹ️ Geen Script URL - alleen lokale opslag wordt gebruikt');
                 return;
             }
             
             try {
-                console.log('ðŸ”„ Laden gedeelde status...');
+                console.log('🔄 Laden gedeelde status...');
                 const response = await fetch(state.scriptUrl + '?t=' + Date.now());
                 
                 if (!response.ok) {
-                    console.warn(`âš ï¸ Script response niet OK: ${response.status}`);
+                    console.warn(`⚠️ Script response niet OK: ${response.status}`);
                     return;
                 }
                 
                 const data = await response.json();
-                console.log('ðŸ“¥ Script response:', data);
+                console.log('📥 Script response:', data);
                 
                 if (data.data && Array.isArray(data.data) && data.data.length > 0) {
                     // Merge with local status - track what changed
-                    console.log(`ðŸ“ Mergen van ${data.data.length} taken uit Sheet...`);
+                    console.log(`📝 Mergen van ${data.data.length} taken uit Sheet...`);
                     let updatedCount = 0;
                     let newFromOther = 0;
                     
@@ -1372,7 +1372,7 @@
                     });
                     
                     localStorage.setItem('completedTasks', JSON.stringify(state.completedTasks));
-                    console.log(`âœ… Gedeelde status geladen: ${Object.keys(state.completedTasks).length} totale taken (${updatedCount} updates)`);
+                    console.log(`✅ Gedeelde status geladen: ${Object.keys(state.completedTasks).length} totale taken (${updatedCount} updates)`);
                     
                     // Show notification if there are updates from the other person
                     if (newFromOther > 0) {
@@ -1386,24 +1386,24 @@
                     
                     updateSyncBadge('active');
                 } else {
-                    console.log('â„¹ï¸ Geen gedeelde taken in Sheet - lokale data behouden');
+                    console.log('ℹ️ Geen gedeelde taken in Sheet - lokale data behouden');
                     updateSyncBadge('active');
                 }
             } catch (error) {
-                console.error('âŒ Load shared status failed:', error);
-                console.log('â„¹ï¸ Lokale data behouden na sync error');
+                console.error('❌ Load shared status failed:', error);
+                console.log('ℹ️ Lokale data behouden na sync error');
             }
         }
         
         function showSyncNotification(count) {
             const otherPerson = state.currentPerson === 'rowan' ? 'Jamie-Lee' : 'Rowan';
-            console.log(`ðŸ”” ${count} nieuwe update(s) van ${otherPerson}`);
+            console.log(`🔁 ${count} nieuwe update(s) van ${otherPerson}`);
             
             // Create toast notification
             const toast = document.createElement('div');
             toast.className = 'sync-toast';
             toast.innerHTML = `
-                <span style="font-size: 20px; margin-right: 8px;">âœ…</span>
+                <span style="font-size: 20px; margin-right: 8px;">✅</span>
                 <span><strong>${otherPerson}</strong> heeft ${count} ${count === 1 ? 'taak' : 'taken'} afgevinkt</span>
             `;
             document.body.appendChild(toast);
@@ -1543,9 +1543,9 @@
         }
 
         function cleanupOldCompletedTasks() {
-            // âš ï¸ TIJDELIJK UITGESCHAKELD VOOR DEBUG
-            console.log('ðŸ§¹ Cleanup is tijdelijk uitgeschakeld');
-            console.log('ðŸ“Š Taken behouden:', Object.keys(state.completedTasks).filter(k => state.completedTasks[k]).length);
+            // ⚠️ TIJDELIJK UITGESCHAKELD VOOR DEBUG
+            console.log('🧹 Cleanup is tijdelijk uitgeschakeld');
+            console.log('📊 Taken behouden:', Object.keys(state.completedTasks).filter(k => state.completedTasks[k]).length);
             return;
             
             /* ORIGINELE CODE (uitgeschakeld):
@@ -1622,7 +1622,7 @@
                 
                 // Check for week range (after person name)
                 if (firstCell.includes('t/m') && currentPerson) {
-                    const weekRange = firstCell.replace(/ðŸ“…\s*/g, '').trim();
+                    const weekRange = firstCell.replace(/📅\s*/g, '').trim();
                     
                     // Find or create week
                     let existingWeek = weeks.find(w => w.range === weekRange);
@@ -1823,7 +1823,7 @@
             if (!state.data.verdeling || state.data.verdeling.length === 0) {
                 container.innerHTML = `
                     <div class="vandaag-empty">
-                        <div class="icon">ðŸ“‹</div>
+                        <div class="icon">📋</div>
                         <p>Geen taken gevonden.<br>Koppel je Google Sheet in Setup.</p>
                     </div>
                 `;
@@ -1840,7 +1840,7 @@
             if (tasks.length === 0) {
                 container.innerHTML = `
                     <div class="vandaag-empty">
-                        <div class="icon">ðŸŽ‰</div>
+                        <div class="icon">🎉</div>
                         <p>Geen taken voor vandaag!</p>
                     </div>
                 `;
@@ -1859,7 +1859,7 @@
                 
                 html += `
                     <div class="vandaag-task ${isDone ? 'done' : ''}" onclick="toggleVandaagTask('${taskId}')">
-                        <div class="checkbox">${isDone ? 'âœ“' : ''}</div>
+                        <div class="checkbox">${isDone ? '✓' : ''}</div>
                         <span class="task-text">${task}</span>
                     </div>
                 `;
@@ -1876,7 +1876,7 @@
             if (!state.data.koken || state.data.koken.length === 0) {
                 container.innerHTML = `
                     <div class="vandaag-empty">
-                        <div class="icon">ðŸ½ï¸</div>
+                        <div class="icon">🍽️</div>
                         <p>Geen kookplanning gevonden.</p>
                     </div>
                 `;
@@ -1892,7 +1892,7 @@
             if (!todayPlan || !todayPlan.cook) {
                 container.innerHTML = `
                     <div class="vandaag-empty">
-                        <div class="icon">ðŸ½ï¸</div>
+                        <div class="icon">🍽️</div>
                         <p>Geen kookinfo voor vandaag.</p>
                     </div>
                 `;
@@ -1903,9 +1903,9 @@
                               todayPlan.cook.toLowerCase().includes('jamie') ? 'jamie' :
                               todayPlan.cook.toLowerCase().includes('samen') ? 'samen' : '';
             
-            const chefEmoji = cookClass === 'rowan' ? 'ðŸ‘¨â€ðŸ³' : 
-                              cookClass === 'jamie' ? 'ðŸ‘©â€ðŸ³' : 
-                              cookClass === 'samen' ? 'ðŸ‘«' : 'ðŸ³';
+            const chefEmoji = cookClass === 'rowan' ? '👨‍🍳' : 
+                              cookClass === 'jamie' ? '👩‍🍳' : 
+                              cookClass === 'samen' ? '👫' : '🍳';
             
             container.innerHTML = `
                 <div class="vandaag-koken">
@@ -1919,14 +1919,14 @@
         }
 
         function toggleVandaagTask(taskId) {
-            console.log('ðŸ”˜ Toggle taak:', taskId);
+            console.log('👆 Toggle taak:', taskId);
             const wasCompleted = state.completedTasks[taskId];
             state.completedTasks[taskId] = !wasCompleted;
-            console.log(`  â””â”€ Status: ${wasCompleted} â†’ ${!wasCompleted}`);
+            console.log(`    ↳ Status: ${wasCompleted} → ${!wasCompleted}`);
             
             // Save locally FIRST for instant feedback
             localStorage.setItem('completedTasks', JSON.stringify(state.completedTasks));
-            console.log('  â””â”€ âœ… Opgeslagen in localStorage');
+            console.log('    ↳ ✅ Opgeslagen in localStorage');
             
             // Update UI immediately (no waiting!)
             const today = new Date();
@@ -1972,7 +1972,7 @@
             if (!state.data.verdeling || state.data.verdeling.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <div class="icon">ðŸ“‹</div>
+                        <div class="icon">📋</div>
                         <p>Geen taken gevonden.<br>Koppel eerst je Google Sheet.</p>
                     </div>
                 `;
@@ -2015,7 +2015,7 @@
                         html += `
                             <div class="task-item ${state.currentPerson} ${isDone ? 'done' : ''}" 
                                  onclick="toggleTask('${taskId}')">
-                                <div class="checkbox">${isDone ? 'âœ“' : ''}</div>
+                                <div class="checkbox">${isDone ? '✓' : ''}</div>
                                 <span class="task-text">${task}</span>
                             </div>
                         `;
@@ -2035,7 +2035,7 @@
             if (!state.data.koken || state.data.koken.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <div class="icon">ðŸ³</div>
+                        <div class="icon">🍳</div>
                         <p>Geen kookplanning gevonden.<br>Koppel eerst je Google Sheet.</p>
                     </div>
                 `;
@@ -2062,7 +2062,7 @@
                 return `
                     <div class="cook-day ${isToday ? 'today' : ''}">
                         <span class="day-name">${d.day}</span>
-                        <span class="cook-name ${cookClass}">${d.cook || 'â€”'}</span>
+                        <span class="cook-name ${cookClass}">${d.cook || '—'}</span>
                         <span class="meal">${d.meal || ''}</span>
                     </div>
                 `;
@@ -2081,14 +2081,14 @@
         }
 
         function toggleTask(taskId) {
-            console.log('ðŸ”˜ Toggle taak:', taskId);
+            console.log('👆 Toggle taak:', taskId);
             const wasCompleted = state.completedTasks[taskId];
             state.completedTasks[taskId] = !wasCompleted;
-            console.log(`  â””â”€ Status: ${wasCompleted} â†’ ${!wasCompleted}`);
+            console.log(`    ↳ Status: ${wasCompleted} → ${!wasCompleted}`);
             
             // Save locally FIRST for instant feedback
             localStorage.setItem('completedTasks', JSON.stringify(state.completedTasks));
-            console.log('  â””â”€ âœ… Opgeslagen in localStorage');
+            console.log('    ↳ ✅ Opgeslagen in localStorage');
             
             // Update UI immediately (no waiting!)
             renderVerdeling();
@@ -2227,39 +2227,39 @@
                 resultDiv.style.display = 'block';
                 resultDiv.style.background = '#FEE2E2';
                 resultDiv.style.color = '#991B1B';
-                resultDiv.innerHTML = 'âŒ Geen Script URL ingesteld. Plak eerst je Apps Script URL hierboven.';
+                resultDiv.innerHTML = '❌ Geen Script URL ingesteld. Plak eerst je Apps Script URL hierboven.';
                 return;
             }
             
             resultDiv.style.display = 'block';
             resultDiv.style.background = '#FEF3C7';
             resultDiv.style.color = '#92400E';
-            resultDiv.innerHTML = 'â³ Connectie testen...';
+            resultDiv.innerHTML = '⏳ Connectie testen...';
             
-            console.log('ðŸ§ª Test Apps Script connectie:', state.scriptUrl);
+            console.log('🧪 Test Apps Script connectie:', state.scriptUrl);
             
             // Test 1: GET request (load data)
             try {
-                console.log('ðŸ“¥ Test 1: GET request...');
+                console.log('📥 Test 1: GET request...');
                 const getResponse = await fetch(state.scriptUrl + '?t=' + Date.now());
-                console.log('  â””â”€ Response status:', getResponse.status);
-                console.log('  â””â”€ Response OK:', getResponse.ok);
+                console.log('    ↳ Response status:', getResponse.status);
+                console.log('    ↳ Response OK:', getResponse.ok);
                 
                 const getData = await getResponse.json();
-                console.log('  â””â”€ Data ontvangen:', getData);
+                console.log('    ↳ Data ontvangen:', getData);
                 
                 if (getData.data) {
                     resultDiv.style.background = '#D1FAE5';
                     resultDiv.style.color = '#065F46';
-                    resultDiv.innerHTML = `âœ… <strong>GET werkt!</strong><br>Ontvangen: ${getData.data.length} taken uit Sheet<br><br>Nu test POST...`;
+                    resultDiv.innerHTML = `✅ <strong>GET werkt!</strong><br>Ontvangen: ${getData.data.length} taken uit Sheet<br><br>Nu test POST...`;
                 } else {
-                    resultDiv.innerHTML = `âš ï¸ <strong>GET werkt deels</strong><br>Response ontvangen maar geen data array.<br>Response: ${JSON.stringify(getData)}<br><br>Nu test POST...`;
+                    resultDiv.innerHTML = `⚠️ <strong>GET werkt deels</strong><br>Response ontvangen maar geen data array.<br>Response: ${JSON.stringify(getData)}<br><br>Nu test POST...`;
                 }
             } catch (error) {
-                console.error('âŒ GET error:', error);
+                console.error('❌ GET error:', error);
                 resultDiv.style.background = '#FEE2E2';
                 resultDiv.style.color = '#991B1B';
-                resultDiv.innerHTML = `âŒ <strong>GET mislukt</strong><br>Error: ${error.message}<br><br>Check of de Script URL klopt.`;
+                resultDiv.innerHTML = `❌ <strong>GET mislukt</strong><br>Error: ${error.message}<br><br>Check of de Script URL klopt.`;
                 return;
             }
             
@@ -2268,7 +2268,7 @@
             
             // Test 2: POST request (save data)
             try {
-                console.log('ðŸ“¤ Test 2: POST request...');
+                console.log('📤 Test 2: POST request...');
                 const testData = {
                     week: '03-02 t/m 09-02',
                     person: 'test',
@@ -2276,7 +2276,7 @@
                     task: 'Test taak van ' + new Date().toLocaleTimeString(),
                     completed: true
                 };
-                console.log('  â””â”€ Test data:', testData);
+                console.log('    ↳ Test data:', testData);
                 
                 const postResponse = await fetch(state.scriptUrl, {
                     method: 'POST',
@@ -2287,34 +2287,34 @@
                     mode: 'cors'  // Changed from no-cors to see errors
                 });
                 
-                console.log('  â””â”€ POST status:', postResponse.status);
-                console.log('  â””â”€ POST OK:', postResponse.ok);
+                console.log('    ↳ POST status:', postResponse.status);
+                console.log('    ↳ POST OK:', postResponse.ok);
                 
                 if (postResponse.ok) {
                     const postData = await postResponse.json();
-                    console.log('  â””â”€ POST response:', postData);
+                    console.log('    ↳ POST response:', postData);
                     
                     resultDiv.style.background = '#D1FAE5';
                     resultDiv.style.color = '#065F46';
-                    resultDiv.innerHTML = `âœ… <strong>Volledige test GESLAAGD!</strong><br><br>GET: âœ… Werkt<br>POST: âœ… Werkt<br><br>Open je Google Sheet en check het "Status" tabblad - daar zou een test-rij moeten staan!`;
+                    resultDiv.innerHTML = `✅ <strong>Volledige test GESLAAGD!</strong><br><br>GET: ✅ Werkt<br>POST: ✅ Werkt<br><br>Open je Google Sheet en check het "Status" tabblad - daar zou een test-rij moeten staan!`;
                 } else {
                     throw new Error(`Status ${postResponse.status}`);
                 }
             } catch (error) {
-                console.error('âŒ POST error:', error);
+                console.error('❌ POST error:', error);
                 resultDiv.style.background = '#FEF3C7';
                 resultDiv.style.color = '#92400E';
-                resultDiv.innerHTML = `âš ï¸ <strong>CORS Probleem (maar werkt wel!)</strong><br><br>GET: âœ…<br>POST: âš ï¸ Response geblokkeerd door browser<br><br>âœ¨ <strong>Goed nieuws:</strong> De POST komt WEL aan bij je Apps Script en werkt! De browser blokkeert alleen de response.<br><br><strong>Check je Google Sheet "Status" tabblad</strong> - daar zou een test-rij moeten staan. Als die er staat, werkt alles! ðŸŽ‰<br><br>Dit is normaal gedrag voor Google Apps Script en heeft geen invloed op de functionaliteit.`;
+                resultDiv.innerHTML = `⚠️ <strong>CORS Probleem (maar werkt wel!)</strong><br><br>GET: ✅<br>POST: ⚠️ Response geblokkeerd door browser<br><br>✨ <strong>Goed nieuws:</strong> De POST komt WEL aan bij je Apps Script en werkt! De browser blokkeert alleen de response.<br><br><strong>Check je Google Sheet "Status" tabblad</strong> - daar zou een test-rij moeten staan. Als die er staat, werkt alles! 🎉<br><br>Dit is normaal gedrag voor Google Apps Script en heeft geen invloed op de functionaliteit.`;
             }
         }
 
         async function manualSync() {
             if (!state.scriptUrl) {
-                alert('âš ï¸ Geen Script URL ingesteld.\n\nVoer eerst je Apps Script URL in om te kunnen synchroniseren.');
+                alert('⚠️ Geen Script URL ingesteld.\n\nVoer eerst je Apps Script URL in om te kunnen synchroniseren.');
                 return;
             }
             
-            console.log('ðŸ”„ Handmatige sync gestart...');
+            console.log('🔄 Handmatige sync gestart...');
             updateSyncStatus('loading', 'Synchroniseren...');
             
             // Load shared status from sheet
@@ -2331,7 +2331,7 @@
                 resultDiv.style.display = 'block';
                 resultDiv.style.background = '#D1FAE5';
                 resultDiv.style.color = '#065F46';
-                resultDiv.innerHTML = 'âœ… <strong>Sync voltooid!</strong><br>Alle wijzigingen van je partner zijn nu zichtbaar.';
+                resultDiv.innerHTML = '✅ <strong>Sync voltooid!</strong><br>Alle wijzigingen van je partner zijn nu zichtbaar.';
                 
                 setTimeout(() => {
                     resultDiv.style.display = 'none';
@@ -2399,26 +2399,26 @@
             const localCount = Object.keys(parsedData).filter(k => parsedData[k]).length;
             
             let html = `
-                <strong>ðŸ“Š State Info:</strong><br>
-                â€¢ Afgevinkte taken in memory: ${completedCount}<br>
-                â€¢ Totale taken in memory: ${totalCount}<br>
-                â€¢ Afgevinkte taken in localStorage: ${localCount}<br>
-                â€¢ Sheet ID: ${state.sheetId ? 'âœ… Ja' : 'âŒ Nee'}<br>
-                â€¢ Script URL: ${state.scriptUrl ? 'âœ… Ja' : 'âŒ Nee'}<br>
-                â€¢ Huidige week: ${state.currentWeek + 1}<br>
-                â€¢ Sync queue: ${state.syncQueue.length} wachtend<br>
-                â€¢ Sync actief: ${isProcessingQueue ? 'ðŸ”„ Ja' : 'â¸ï¸ Nee'}<br>
+                <strong>📊 State Info:</strong><br>
+                • Afgevinkte taken in memory: ${completedCount}<br>
+                • Totale taken in memory: ${totalCount}<br>
+                • Afgevinkte taken in localStorage: ${localCount}<br>
+                • Sheet ID: ${state.sheetId ? '✅ Ja' : '❌ Nee'}<br>
+                • Script URL: ${state.scriptUrl ? '✅ Ja' : '❌ Nee'}<br>
+                • Huidige week: ${state.currentWeek + 1}<br>
+                • Sync queue: ${state.syncQueue.length} wachtend<br>
+                • Sync actief: ${isProcessingQueue ? '🔄 Ja' : '⏸️ Nee'}<br>
                 <br>
-                <strong>ðŸ”‘ Voorbeeld taken IDs:</strong><br>
+                <strong>👁 Voorbeeld taken IDs:</strong><br>
             `;
             
             const sampleTasks = Object.keys(state.completedTasks).slice(0, 3);
             if (sampleTasks.length > 0) {
                 sampleTasks.forEach(taskId => {
-                    html += `â€¢ ${taskId}: ${state.completedTasks[taskId] ? 'âœ…' : 'â¬œ'}<br>`;
+                    html += `• ${taskId}: ${state.completedTasks[taskId] ? '✅' : '⬜'}<br>`;
                 });
             } else {
-                html += 'â€¢ Geen taken gevonden<br>';
+                html += '• Geen taken gevonden<br>';
             }
             
             debugDiv.innerHTML = html;
@@ -2426,11 +2426,11 @@
         }
 
         function clearAllTasks() {
-            if (confirm('âš ï¸ Weet je zeker dat je alle afgevinkte taken wilt resetten?\n\nDit verwijdert alle lokale data. De Google Sheet blijft intact.')) {
+            if (confirm('⚠️ Weet je zeker dat je alle afgevinkte taken wilt resetten?\n\nDit verwijdert alle lokale data. De Google Sheet blijft intact.')) {
                 state.completedTasks = {};
                 localStorage.setItem('completedTasks', JSON.stringify({}));
-                console.log('ðŸ—‘ï¸ Alle afgevinkte taken gewist');
-                alert('âœ… Alle afgevinkte taken zijn gereset!');
+                console.log('🗑️ Alle afgevinkte taken gewist');
+                alert('✅ Alle afgevinkte taken zijn gereset!');
                 renderCurrentTab();
             }
         }
@@ -2440,8 +2440,8 @@
             // Migrate old taskId format to new format
             migrateOldTaskIds();
 
-            console.log('ðŸš€ App geladen');
-            console.log('ðŸ“Š State bij laden:');
+            console.log('🚀 App geladen');
+            console.log('📊 State bij laden:');
             console.log('  - sheetId:', state.sheetId ? 'Ja' : 'Nee');
             console.log('  - scriptUrl:', state.scriptUrl ? 'Ja' : 'Nee');
             console.log('  - Afgevinkte taken:', Object.keys(state.completedTasks).filter(k => state.completedTasks[k]).length);
@@ -2457,20 +2457,20 @@
             
             // Render cached data first
             if (state.data.verdeling || state.data.koken || state.data.tasks) {
-                console.log('ðŸ“‹ Cached data gevonden - renderen...');
+                console.log('📋 Cached data gevonden - renderen...');
                 // Detect current week based on cached data
                 detectCurrentWeek();
-                console.log('ðŸ—“ï¸ Huidige week:', state.currentWeek);
+                console.log('🗓️ Huidige week:', state.currentWeek);
                 cleanupOldCompletedTasks();
-                console.log('ðŸ§¹ Na cleanup - Afgevinkte taken:', Object.keys(state.completedTasks).filter(k => state.completedTasks[k]).length);
+                console.log('🧹 Na cleanup - Afgevinkte taken:', Object.keys(state.completedTasks).filter(k => state.completedTasks[k]).length);
                 renderCurrentTab();
             }
             
             // Then sync fresh data
             if (state.sheetId) {
-                console.log('ðŸ”„ Starten sync met Google Sheets...');
+                console.log('🔄 Starten sync met Google Sheets...');
                 if (state.scriptUrl) {
-                    console.log('   â””â”€ Gedeelde status wordt ook geladen van Apps Script');
+                    console.log('     ↳ Gedeelde status wordt ook geladen van Apps Script');
                 }
                 syncData();
             } else {
@@ -2481,7 +2481,7 @@
         // Sync on visibility change (when app becomes visible again)
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible' && state.sheetId) {
-                console.log('ðŸ‘ï¸ App weer zichtbaar - synchroniseren...');
+                console.log('👁️ App weer zichtbaar - synchroniseren...');
                 syncData();
             }
         });
