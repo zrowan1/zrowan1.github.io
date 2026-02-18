@@ -886,6 +886,171 @@
             opacity: 1;
         }
 
+        /* ===== BOODSCHAPPENLIJST ===== */
+        .bood-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .bood-header .icon { font-size: 22px; }
+
+        .bood-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            font-family: "Nunito", sans-serif;
+            flex: 1;
+        }
+
+        .bood-clear-btn {
+            padding: 6px 12px;
+            background: var(--light-teal);
+            color: var(--med-text);
+            border: none;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: "Quicksand", sans-serif;
+        }
+
+        .bood-input-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            align-items: flex-start;
+        }
+
+        .bood-input-row input {
+            flex: 1;
+            padding: 12px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            background: var(--card-bg);
+            color: var(--dark-text);
+            font-family: "Quicksand", sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .bood-input-row input:focus { border-color: var(--med-teal); }
+
+        .bood-who {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .bood-who-btn {
+            padding: 6px 10px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            background: var(--card-bg);
+            color: var(--light-text);
+            font-family: "Quicksand", sans-serif;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .bood-who-btn.active {
+            background: var(--med-teal);
+            color: white;
+            border-color: var(--med-teal);
+        }
+
+        .bood-add-btn {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #C7B299 0%, #8B7355 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 26px;
+            cursor: pointer;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bood-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: opacity 0.2s;
+        }
+
+        .bood-item.done { opacity: 0.55; }
+
+        .bood-item .bood-checkbox {
+            width: 26px;
+            height: 26px;
+            border: 2px solid var(--med-teal);
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            color: white;
+        }
+
+        .bood-item.done .bood-checkbox {
+            background: var(--green);
+            border-color: var(--green);
+        }
+
+        .bood-item .bood-text {
+            flex: 1;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .bood-item.done .bood-text { text-decoration: line-through; }
+
+        .bood-item .bood-meta {
+            font-size: 11px;
+            color: var(--light-text);
+            text-align: right;
+            line-height: 1.4;
+        }
+
+        .bood-item .bood-delete {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: var(--light-teal);
+            color: var(--light-text);
+            border-radius: 50%;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .bood-section-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 16px 0 8px;
+        }
+
         /* Last sync indicator */
         .last-sync {
             font-size: 12px;
@@ -917,6 +1082,10 @@
         <button class="tab" data-tab="koken">
             <span class="tab-icon">🍳</span>
             Koken
+        </button>
+        <button class="tab" data-tab="boodschappen">
+            <span class="tab-icon">🛒</span>
+            Lijst
         </button>
         <button class="tab" data-tab="instellingen">
             <span class="tab-icon">⚙️</span>
@@ -1002,6 +1171,31 @@
             <div class="card" id="cookList">
                 <div class="loading-spinner">
                     <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boodschappenlijst Tab -->
+        <div class="tab-content" id="boodschappen">
+            <div class="bood-header">
+                <span class="icon">🛒</span>
+                <h2>Boodschappenlijst</h2>
+                <button class="bood-clear-btn" onclick="clearCompletedItems()" id="clearCompletedBtn" style="display:none;">Wis afgevinkt</button>
+            </div>
+
+            <div class="bood-input-row">
+                <input type="text" id="boodInput" placeholder="Item toevoegen..." autocomplete="off" />
+                <div class="bood-who">
+                    <button class="bood-who-btn active" id="whoRowan" onclick="selectWho('rowan')">Rowan</button>
+                    <button class="bood-who-btn" id="whoJamie" onclick="selectWho('jamie')">Jamie-Lee</button>
+                </div>
+                <button class="bood-add-btn" onclick="addBoodschapItem()">+</button>
+            </div>
+
+            <div id="boodList">
+                <div class="vandaag-empty">
+                    <div class="icon">🛒</div>
+                    <p>Lijst is leeg.<br>Voeg een item toe!</p>
                 </div>
             </div>
         </div>
@@ -1134,7 +1328,9 @@
             },
             completedTasks: JSON.parse(localStorage.getItem('completedTasks') || '{}'),
             lastSync: localStorage.getItem('lastSync') || null,
-            syncQueue: []  // Queue for pending sync requests
+            syncQueue: [],  // Queue for pending sync requests
+            shoppingItems: JSON.parse(localStorage.getItem('shoppingItems') || '[]'),
+            shoppingWho: 'rowan'
         };
 
         // ==================== GOOGLE SHEETS ====================
@@ -1238,6 +1434,8 @@
                 
                 // Load shared task status
                 await loadSharedStatus();
+                // Load shopping list
+                await loadShoppingItems();
                 
                 renderCurrentTab();
             } catch (error) {
@@ -1776,6 +1974,7 @@
                 case 'vandaag': renderVandaag(); break;
                 case 'verdeling': renderVerdeling(); break;
                 case 'koken': renderKoken(); break;
+                case 'boodschappen': renderBoodschappen(); break;
             }
         }
 
@@ -2338,6 +2537,148 @@
                 }, 3000);
             }
         }
+
+        // ==================== BOODSCHAPPENLIJST ====================
+
+        function selectWho(who) {
+            state.shoppingWho = who;
+            document.getElementById('whoRowan').classList.toggle('active', who === 'rowan');
+            document.getElementById('whoJamie').classList.toggle('active', who === 'jamie');
+        }
+
+        async function addBoodschapItem() {
+            const input = document.getElementById('boodInput');
+            const name = input.value.trim();
+            if (!name) return;
+
+            const item = {
+                id: Date.now().toString(),
+                name: name,
+                addedBy: state.shoppingWho,
+                completed: false,
+                completedBy: null,
+                timestamp: new Date().toISOString()
+            };
+
+            state.shoppingItems.push(item);
+            localStorage.setItem('shoppingItems', JSON.stringify(state.shoppingItems));
+            input.value = '';
+            renderBoodschappen();
+            await syncShoppingAction({ action: 'add', item });
+        }
+
+        async function toggleBoodschapItem(id) {
+            const item = state.shoppingItems.find(i => i.id === id);
+            if (!item) return;
+            item.completed = !item.completed;
+            item.completedBy = item.completed ? state.currentPerson : null;
+            localStorage.setItem('shoppingItems', JSON.stringify(state.shoppingItems));
+            renderBoodschappen();
+            await syncShoppingAction({ action: 'toggle', id, completed: item.completed, completedBy: item.completedBy });
+        }
+
+        async function deleteBoodschapItem(id) {
+            state.shoppingItems = state.shoppingItems.filter(i => i.id !== id);
+            localStorage.setItem('shoppingItems', JSON.stringify(state.shoppingItems));
+            renderBoodschappen();
+            await syncShoppingAction({ action: 'delete', id });
+        }
+
+        async function clearCompletedItems() {
+            state.shoppingItems = state.shoppingItems.filter(i => !i.completed);
+            localStorage.setItem('shoppingItems', JSON.stringify(state.shoppingItems));
+            renderBoodschappen();
+            await syncShoppingAction({ action: 'clearCompleted' });
+        }
+
+        async function syncShoppingAction(payload) {
+            if (!state.scriptUrl) return;
+            try {
+                await fetch(state.scriptUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({ type: 'shopping', ...payload }),
+                    mode: 'no-cors'
+                });
+            } catch (e) {
+                console.warn('Shopping sync error:', e);
+            }
+        }
+
+        async function loadShoppingItems() {
+            if (!state.scriptUrl) return;
+            try {
+                const response = await fetch(state.scriptUrl + '?type=shopping&t=' + Date.now());
+                if (!response.ok) return;
+                const data = await response.json();
+                if (data.items && Array.isArray(data.items)) {
+                    const remoteIds = new Set(data.items.map(i => i.id));
+                    const localOnly = state.shoppingItems.filter(i => !remoteIds.has(i.id));
+                    state.shoppingItems = [...data.items, ...localOnly];
+                    localStorage.setItem('shoppingItems', JSON.stringify(state.shoppingItems));
+                    if (state.currentTab === 'boodschappen') renderBoodschappen();
+                }
+            } catch (e) {
+                console.warn('Load shopping items error:', e);
+            }
+        }
+
+        function renderBoodschappen() {
+            const container = document.getElementById('boodList');
+            const clearBtn = document.getElementById('clearCompletedBtn');
+            const items = state.shoppingItems;
+
+            if (clearBtn) clearBtn.style.display = items.some(i => i.completed) ? 'block' : 'none';
+
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div class="vandaag-empty">
+                        <div class="icon">🛒</div>
+                        <p>Lijst is leeg.<br>Voeg een item toe!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const active = items.filter(i => !i.completed);
+            const done = items.filter(i => i.completed);
+            let html = '';
+
+            active.forEach(item => { html += renderBoodschapItem(item); });
+
+            if (done.length > 0) {
+                html += `<div class="bood-section-label">Afgevinkt (${done.length})</div>`;
+                done.forEach(item => { html += renderBoodschapItem(item); });
+            }
+
+            container.innerHTML = html;
+
+            if (state.scriptUrl) loadShoppingItems();
+        }
+
+        function renderBoodschapItem(item) {
+            const addedByLabel = item.addedBy === 'rowan' ? 'Rowan' : 'Jamie-Lee';
+            const completedByLabel = item.completedBy === 'rowan' ? 'Rowan' : 'Jamie-Lee';
+            return `
+                <div class="bood-item ${item.completed ? 'done' : ''}">
+                    <div class="bood-checkbox" onclick="toggleBoodschapItem('${item.id}')">
+                        ${item.completed ? '✓' : ''}
+                    </div>
+                    <span class="bood-text">${item.name}</span>
+                    <div class="bood-meta">
+                        door ${addedByLabel}
+                        ${item.completed && item.completedBy ? '<br>✓ ' + completedByLabel : ''}
+                    </div>
+                    <button class="bood-delete" onclick="deleteBoodschapItem('${item.id}')">×</button>
+                </div>
+            `;
+        }
+
+        // Enter key in shopping input
+        document.addEventListener('DOMContentLoaded', () => {
+            const boodInput = document.getElementById('boodInput');
+            if (boodInput) boodInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') addBoodschapItem(); });
+        });
 
         // ==================== MIGRATION ====================
         function migrateOldTaskIds() {
