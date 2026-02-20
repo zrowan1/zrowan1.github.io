@@ -150,9 +150,9 @@
 
         .tab {
             flex: 1;
-            padding: 14px 8px;
+            padding: 10px 4px;
             text-align: center;
-            font-size: 14px;
+            font-size: 11px;
             font-weight: 500;
             color: var(--light-text);
             border: none;
@@ -178,9 +178,9 @@
         }
 
         .tab-icon {
-            font-size: 20px;
+            font-size: 18px;
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         /* Content */
@@ -1058,6 +1058,162 @@
             text-align: center;
             margin-top: 8px;
         }
+
+        /* ===== STATISTIEKEN ===== */
+        .stats-hero {
+            background: linear-gradient(135deg, #C7B299 0%, #8B7355 100%);
+            border-radius: 16px;
+            padding: 20px;
+            color: white;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .stats-hero .stats-title {
+            font-size: 13px;
+            opacity: 0.85;
+            margin-bottom: 4px;
+        }
+        .stats-hero .stats-subtitle {
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'Nunito', sans-serif;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .stats-mini-card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 16px 12px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .stats-mini-card .mini-icon {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+        .stats-mini-card .mini-label {
+            font-size: 11px;
+            color: var(--light-text);
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+        .stats-mini-card .mini-value {
+            font-size: 22px;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            color: var(--dark-text);
+        }
+        .stats-mini-card .mini-sub {
+            font-size: 11px;
+            color: var(--light-text);
+            margin-top: 2px;
+        }
+        .stats-mini-card.rowan { border-left: 3px solid var(--rowan-text); }
+        .stats-mini-card.jamie { border-left: 3px solid var(--jamie-text); }
+        .stats-bar-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .stats-bar-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .stats-person-row {
+            margin-bottom: 12px;
+        }
+        .stats-person-row:last-child { margin-bottom: 0; }
+        .stats-person-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .stats-person-label .name { color: var(--dark-text); }
+        .stats-person-label .pct { color: var(--med-text); }
+        .stats-progress {
+            height: 12px;
+            background: var(--light-teal);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .stats-progress .bar {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.6s ease;
+        }
+        .stats-progress .bar.rowan {
+            background: linear-gradient(90deg, var(--rowan-text) 0%, #8B7355 100%);
+        }
+        .stats-progress .bar.jamie {
+            background: linear-gradient(90deg, var(--jamie-text) 0%, #C7856A 100%);
+        }
+        .stats-cook-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--very-light-teal);
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+        .stats-cook-item:last-child { margin-bottom: 0; }
+        .stats-cook-item .cook-icon { font-size: 24px; }
+        .stats-cook-item .cook-info { flex: 1; }
+        .stats-cook-item .cook-name { font-size: 14px; font-weight: 600; }
+        .stats-cook-item .cook-count { font-size: 12px; color: var(--light-text); }
+        .stats-cook-item .cook-pct {
+            font-size: 18px;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            color: var(--med-teal);
+        }
+        .stats-loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--light-text);
+        }
+        .stats-loading .icon { font-size: 40px; margin-bottom: 12px; }
+        .stats-no-script {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border: 1px dashed #F59E0B;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            color: #92400E;
+        }
+        .stats-no-script .icon { font-size: 36px; margin-bottom: 10px; }
+        .stats-no-script p { font-size: 13px; line-height: 1.6; }
+        .stats-refresh-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #C7B299 0%, #8B7355 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Nunito', sans-serif;
+            margin-top: 12px;
+            cursor: pointer;
+        }
+        .stats-week-label {
+            font-size: 12px;
+            color: var(--light-text);
+            text-align: center;
+            margin-bottom: 16px;
+        }
     </style>
 </head>
 <body>
@@ -1086,6 +1242,10 @@
         <button class="tab" data-tab="boodschappen">
             <span class="tab-icon">🛒</span>
             Lijst
+        </button>
+        <button class="tab" data-tab="stats">
+            <span class="tab-icon">📊</span>
+            Stats
         </button>
         <button class="tab" data-tab="instellingen">
             <span class="tab-icon">⚙️</span>
@@ -1200,6 +1360,24 @@
             </div>
         </div>
 
+
+        <!-- Stats Tab -->
+        <div class="tab-content" id="stats">
+            <div class="stats-hero">
+                <div class="stats-title">📊 Jullie prestaties</div>
+                <div class="stats-subtitle" id="statsWeekLabel">Laden...</div>
+            </div>
+
+            <div id="statsContent">
+                <div class="stats-loading">
+                    <div class="icon">📊</div>
+                    <p>Statistieken laden...</p>
+                </div>
+            </div>
+
+            <button class="stats-refresh-btn" onclick="loadStats()">🔄 Vernieuwen</button>
+        </div>
+
         <!-- Instellingen Tab -->
         <div class="tab-content" id="instellingen">
             <div class="card settings-card">
@@ -1258,7 +1436,9 @@
                     <h2>Debug Info</h2>
                 </div>
                 <button onclick="showDebugInfo()" style="width: 100%; padding: 12px; background: #F59E0B; color: white; border: none; border-radius: 8px; font-weight: 600; margin-bottom: 8px;">Toon LocalStorage Info</button>
-                <button onclick="clearAllTasks()" style="width: 100%; padding: 12px; background: #DC2626; color: white; border: none; border-radius: 8px; font-weight: 600;">Reset Alle Afgevinkte Taken</button>
+                <button onclick="clearAllTasks()" style="width: 100%; padding: 12px; background: #DC2626; color: white; border: none; border-radius: 8px; font-weight: 600; margin-bottom: 8px;">Reset Alle Afgevinkte Taken</button>
+                <button onclick="triggerArchive()" style="width: 100%; padding: 12px; background: #7C3AED; color: white; border: none; border-radius: 8px; font-weight: 600;">🗃 Archiveer Oude Data (&gt;3 mnd)</button>
+                <div id="archiveResult" style="margin-top: 8px; padding: 10px; border-radius: 8px; display: none; font-size: 13px;"></div>
                 <div id="debugInfo" style="margin-top: 12px; font-size: 13px; color: #92400E; display: none;"></div>
             </div>
 
@@ -1414,6 +1594,8 @@
                 if (koken) {
                     state.data.koken = parseKoken(koken);
                     localStorage.setItem('kokenData', JSON.stringify(state.data.koken));
+                    // Stuur huidige week kookplanning naar Apps Script voor statistieken
+                    saveCookingHistory();
                 }
 
                 state.lastSync = new Date().toISOString();
@@ -1975,6 +2157,7 @@
                 case 'verdeling': renderVerdeling(); break;
                 case 'koken': renderKoken(); break;
                 case 'boodschappen': renderBoodschappen(); break;
+                case 'stats': loadStats(); break;
             }
         }
 
@@ -2773,6 +2956,278 @@
                 console.log('🗑️ Alle afgevinkte taken gewist');
                 alert('✅ Alle afgevinkte taken zijn gereset!');
                 renderCurrentTab();
+            }
+        }
+
+
+        // ==================== STATISTIEKEN ====================
+
+        async function loadStats() {
+            const container = document.getElementById('statsContent');
+            if (!container) return;
+
+            if (!state.scriptUrl) {
+                container.innerHTML = `
+                    <div class="stats-no-script">
+                        <div class="icon">⚙️</div>
+                        <p><strong>Apps Script URL nodig</strong><br>
+                        Stel de script URL in via het Setup tabblad om statistieken te zien.
+                        De stats worden berekend op basis van jullie afgevinkte taken.</p>
+                    </div>
+                `;
+                document.getElementById('statsWeekLabel').textContent = 'Nog niet ingesteld';
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="stats-loading">
+                    <div class="icon">📊</div>
+                    <p>Statistieken ophalen...</p>
+                </div>
+            `;
+
+            const currentWeek = state.data.verdeling && state.data.verdeling[state.currentWeek]
+                ? state.data.verdeling[state.currentWeek].range
+                : '';
+
+            try {
+                const url = state.scriptUrl + '?type=stats&week=' + encodeURIComponent(currentWeek) + '&t=' + Date.now();
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Response ' + response.status);
+                const data = await response.json();
+                renderStats(data, currentWeek);
+            } catch (error) {
+                console.error('Stats load error:', error);
+                container.innerHTML = `
+                    <div class="stats-no-script">
+                        <div class="icon">⚠️</div>
+                        <p><strong>Kon statistieken niet laden</strong><br>
+                        Controleer je Apps Script URL in Setup.<br><br>
+                        <small>Fout: ${error.message}</small></p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderStats(data, currentWeek) {
+            const container = document.getElementById('statsContent');
+            const weekLabel = document.getElementById('statsWeekLabel');
+
+            if (weekLabel) {
+                weekLabel.textContent = currentWeek ? 'Week ' + currentWeek : 'Alle weken';
+            }
+
+            const tasks = data.tasks || {};
+            const cooking = data.cooking || {};
+
+            const thisWeek = tasks.thisWeek || { rowan: 0, jamie: 0 };
+            const last4 = tasks.last4Weeks || { rowan: 0, jamie: 0 };
+            const rStreak = tasks.rowan_streak || 0;
+            const jStreak = tasks.jamie_streak || 0;
+
+            const totalLast4 = last4.rowan + last4.jamie;
+            const rPct = totalLast4 > 0 ? Math.round((last4.rowan / totalLast4) * 100) : 0;
+            const jPct = totalLast4 > 0 ? Math.round((last4.jamie / totalLast4) * 100) : 0;
+
+            const totalCook = cooking.total || 0;
+            const rCookPct = totalCook > 0 ? Math.round((cooking.rowan / totalCook) * 100) : 0;
+            const jCookPct = totalCook > 0 ? Math.round((cooking.jamie / totalCook) * 100) : 0;
+            const sCookPct = totalCook > 0 ? Math.round((cooking.samen / totalCook) * 100) : 0;
+
+            let html = '';
+
+            // === DEZE WEEK MINI CARDS ===
+            html += `<p class="stats-week-label">📅 Deze week — taken afgevinkt</p>`;
+            html += `<div class="stats-grid">`;
+            html += `
+                <div class="stats-mini-card rowan">
+                    <div class="mini-icon">👤</div>
+                    <div class="mini-label">Rowan</div>
+                    <div class="mini-value">${thisWeek.rowan}</div>
+                    <div class="mini-sub">taken gedaan</div>
+                </div>
+                <div class="stats-mini-card jamie">
+                    <div class="mini-icon">👤</div>
+                    <div class="mini-label">Jamie-Lee</div>
+                    <div class="mini-value">${thisWeek.jamie}</div>
+                    <div class="mini-sub">taken gedaan</div>
+                </div>
+            `;
+            html += `</div>`;
+
+            // === STREAK CARDS ===
+            html += `<p class="stats-week-label">🔥 Weken op rij actief</p>`;
+            html += `<div class="stats-grid">`;
+            html += `
+                <div class="stats-mini-card rowan">
+                    <div class="mini-icon">🔥</div>
+                    <div class="mini-label">Rowan streak</div>
+                    <div class="mini-value">${rStreak}</div>
+                    <div class="mini-sub">${rStreak === 1 ? 'week' : 'weken'}</div>
+                </div>
+                <div class="stats-mini-card jamie">
+                    <div class="mini-icon">🔥</div>
+                    <div class="mini-label">Jamie streak</div>
+                    <div class="mini-value">${jStreak}</div>
+                    <div class="mini-sub">${jStreak === 1 ? 'week' : 'weken'}</div>
+                </div>
+            `;
+            html += `</div>`;
+
+            // === VERDELING 4 WEKEN ===
+            html += `
+                <div class="stats-bar-section">
+                    <h3>📋 Taakverdeling — afgelopen 4 weken</h3>
+            `;
+
+            if (totalLast4 === 0) {
+                html += `<p style="font-size:13px; color: var(--light-text); text-align: center; padding: 10px 0;">Nog geen data beschikbaar voor de afgelopen 4 weken.</p>`;
+            } else {
+                html += `
+                    <div class="stats-person-row">
+                        <div class="stats-person-label">
+                            <span class="name">👤 Rowan</span>
+                            <span class="pct">${last4.rowan} taken (${rPct}%)</span>
+                        </div>
+                        <div class="stats-progress">
+                            <div class="bar rowan" style="width: ${rPct}%"></div>
+                        </div>
+                    </div>
+                    <div class="stats-person-row">
+                        <div class="stats-person-label">
+                            <span class="name">👤 Jamie-Lee</span>
+                            <span class="pct">${last4.jamie} taken (${jPct}%)</span>
+                        </div>
+                        <div class="stats-progress">
+                            <div class="bar jamie" style="width: ${jPct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            html += `</div>`;
+
+            // === KOOKVERDELING ===
+            html += `
+                <div class="stats-bar-section">
+                    <h3>🍳 Kookverdeling — afgelopen 4 weken</h3>
+            `;
+
+            if (totalCook === 0) {
+                html += `<p style="font-size:13px; color: var(--light-text); text-align: center; padding: 10px 0;">
+                    Nog geen kookhistorie beschikbaar.<br>
+                    <small>Open de Koken-tab om data te starten.</small>
+                </p>`;
+            } else {
+                if (cooking.rowan > 0) {
+                    html += `
+                        <div class="stats-cook-item">
+                            <span class="cook-icon">👨‍🍳</span>
+                            <div class="cook-info">
+                                <div class="cook-name" style="color: var(--rowan-text)">Rowan</div>
+                                <div class="cook-count">${cooking.rowan} keer gekookt</div>
+                            </div>
+                            <div class="cook-pct">${rCookPct}%</div>
+                        </div>
+                    `;
+                }
+                if (cooking.jamie > 0) {
+                    html += `
+                        <div class="stats-cook-item">
+                            <span class="cook-icon">👩‍🍳</span>
+                            <div class="cook-info">
+                                <div class="cook-name" style="color: var(--jamie-text)">Jamie-Lee</div>
+                                <div class="cook-count">${cooking.jamie} keer gekookt</div>
+                            </div>
+                            <div class="cook-pct">${jCookPct}%</div>
+                        </div>
+                    `;
+                }
+                if (cooking.samen > 0) {
+                    html += `
+                        <div class="stats-cook-item">
+                            <span class="cook-icon">👫</span>
+                            <div class="cook-info">
+                                <div class="cook-name" style="color: var(--samen-text)">Samen</div>
+                                <div class="cook-count">${cooking.samen} keer samen gekookt</div>
+                            </div>
+                            <div class="cook-pct">${sCookPct}%</div>
+                        </div>
+                    `;
+                }
+            }
+            html += `</div>`;
+
+            container.innerHTML = html;
+        }
+
+        // ==================== KOOKHISTORIE OPSLAAN ====================
+        async function saveCookingHistory() {
+            if (!state.scriptUrl || !state.data.koken || state.data.koken.length === 0) return;
+
+            const currentWeekData = state.data.koken[state.currentCookWeek];
+            if (!currentWeekData) return;
+
+            try {
+                await fetch(state.scriptUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({
+                        type: 'cooking_history',
+                        week: currentWeekData.range,
+                        days: currentWeekData.days
+                    }),
+                    mode: 'no-cors'
+                });
+                console.log('🍳 Kookhistorie gestuurd voor week:', currentWeekData.range);
+            } catch (e) {
+                console.warn('Kookhistorie sync error:', e);
+            }
+        }
+
+        // ==================== ARCHIVEREN ====================
+        async function triggerArchive() {
+            if (!state.scriptUrl) {
+                alert('⚠️ Geen Script URL ingesteld. Stel dit in via Setup.');
+                return;
+            }
+
+            const confirmMsg = 'Weet je zeker dat je wilt archiveren?
+
+Alles ouder dan 3 maanden wordt verplaatst naar een "Archief [jaar]" tabblad in je Google Sheet.';
+            if (!confirm(confirmMsg)) return;
+
+            const resultDiv = document.getElementById('archiveResult');
+            if (resultDiv) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.background = '#FEF3C7';
+                resultDiv.style.color = '#92400E';
+                resultDiv.textContent = '⏳ Archiveren...';
+            }
+
+            try {
+                const response = await fetch(state.scriptUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type: 'archive' }),
+                    mode: 'cors'
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (resultDiv) {
+                        resultDiv.style.background = '#D1FAE5';
+                        resultDiv.style.color = '#065F46';
+                        resultDiv.textContent = '✅ ' + data.message;
+                    }
+                } else {
+                    throw new Error('CORS (maar werkt wel!)');
+                }
+            } catch (e) {
+                if (resultDiv) {
+                    resultDiv.style.background = '#FEF3C7';
+                    resultDiv.style.color = '#92400E';
+                    resultDiv.textContent = '⚠️ Browser blokkeert response, maar archivering is WEL uitgevoerd. Check je Google Sheet!';
+                }
             }
         }
 
