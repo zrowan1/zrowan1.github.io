@@ -3191,9 +3191,7 @@
                 return;
             }
 
-            const confirmMsg = 'Weet je zeker dat je wilt archiveren?
-
-Alles ouder dan 3 maanden wordt verplaatst naar een "Archief [jaar]" tabblad in je Google Sheet.';
+            const confirmMsg = 'Weet je zeker dat je wilt archiveren?\n\nAlles ouder dan 3 maanden wordt verplaatst naar een "Archief [jaar]" tabblad in je Google Sheet.';
             if (!confirm(confirmMsg)) return;
 
             const resultDiv = document.getElementById('archiveResult');
