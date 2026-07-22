@@ -1,0 +1,30 @@
+# Huishouden — self-hosted household PWA.
+# Import this file into ZimaOS (App Store → Custom Install / "+" → Import),
+# or run `docker compose up -d --build` on any Docker host.
+services:
+  huishouden:
+    build: .
+    # Or use a prebuilt image instead of build:  image: huishouden:latest
+    container_name: huishouden
+    restart: unless-stopped
+    ports:
+      - "8080:3000" # host:container — open http://<server-ip>:8080
+    environment:
+      TZ: Europe/Amsterdam
+      # A stable secret keeps sessions valid across restarts/redeploys.
+      # If omitted, a random one is generated and persisted in the volume.
+      SESSION_SECRET: "change-me-to-a-long-random-string"
+      # First-boot passwords for the two seeded users (change after first login).
+      SEED_ROWAN_PASSWORD: "rowan"
+      SEED_JAMIE_PASSWORD: "jamie"
+      # Daily reminder time (cron). Default 07:00.
+      REMINDER_CRON: "0 7 * * *"
+      # Set to "true" only when served over HTTPS (e.g. behind a reverse proxy).
+      COOKIE_SECURE: "false"
+      # VAPID keys are auto-generated on first boot and stored in the volume.
+      # To pin your own, set VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY / VAPID_SUBJECT.
+    volumes:
+      - huishouden-data:/data
+
+volumes:
+  huishouden-data:

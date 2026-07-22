@@ -1,0 +1,13 @@
+**/node_modules
+**/dist
+**/.git
+*.md
+data
+.env
+.env.*
+!.env.example
+# Legacy GitHub Pages files (not used by the container)
+OneSignalSDKWorker.js
+sw.js
+manifest.json
+google_sheet_template.xlsx

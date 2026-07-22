@@ -1,0 +1,246 @@
+/* Bundled fonts (no external Google Fonts CDN dependency anymore). */
+@import '@fontsource/nunito/400.css';
+@import '@fontsource/nunito/600.css';
+@import '@fontsource/nunito/700.css';
+@import '@fontsource/nunito/800.css';
+@import '@fontsource/quicksand/500.css';
+@import '@fontsource/quicksand/600.css';
+@import '@fontsource/quicksand/700.css';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --dark-teal: #5d4e3c;
+  --med-teal: #8b7355;
+  --light-teal: #e8ddd4;
+  --very-light-teal: #f5ede4;
+  --green: #85a88c;
+  --light-green: #e8f0e8;
+  --rowan-bg: #e8ddd4;
+  --rowan-text: #5d4e3c;
+  --jamie-bg: #f5e6e0;
+  --jamie-text: #9c6b5c;
+  --samen-bg: #e8e0f0;
+  --samen-text: #6b5a7a;
+  --dark-text: #5d4e3c;
+  --med-text: #8b7355;
+  --light-text: #9c8b7a;
+  --border: #d4c4b5;
+  --white: #ffffff;
+  --bg: #fdf8f3;
+  --card-bg: #ffffff;
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+}
+
+.dark-mode {
+  --dark-teal: #c7b299;
+  --med-teal: #d4c4b5;
+  --light-teal: #3d3528;
+  --very-light-teal: #2d2820;
+  --green: #85a88c;
+  --light-green: #2a3a2a;
+  --rowan-bg: #3d3528;
+  --rowan-text: #d4c4b5;
+  --jamie-bg: #3a2d28;
+  --jamie-text: #e8b8a8;
+  --samen-bg: #2d2838;
+  --samen-text: #b8a8c8;
+  --dark-text: #f5ede4;
+  --med-text: #d4c4b5;
+  --light-text: #9c8b7a;
+  --border: #4d4438;
+  --white: #2d2820;
+  --bg: #1d1810;
+  --card-bg: #2d2820;
+}
+
+body {
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--dark-text);
+  min-height: 100dvh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3 {
+  font-family: 'Quicksand', sans-serif;
+}
+
+.app-shell {
+  max-width: 640px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Sticky gradient header. */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: calc(var(--safe-top) + 16px) 20px 16px;
+  background: linear-gradient(135deg, var(--med-teal), var(--dark-teal));
+  color: #fff;
+}
+.app-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+}
+.app-header .subtitle {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+.content {
+  flex: 1;
+  padding: 16px;
+  padding-bottom: calc(80px + var(--safe-bottom));
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 10px rgba(93, 78, 60, 0.06);
+  transition: background-color 0.3s ease;
+}
+.card h2 {
+  font-size: 16px;
+  color: var(--dark-text);
+  margin-bottom: 12px;
+}
+
+/* Bottom tab bar. */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  background: var(--card-bg);
+  border-top: 1px solid var(--border);
+  padding-bottom: var(--safe-bottom);
+  z-index: 20;
+}
+.bottom-nav a {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0 8px;
+  font-size: 10px;
+  color: var(--light-text);
+  text-decoration: none;
+  font-weight: 600;
+}
+.bottom-nav a .icon {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+.bottom-nav a.router-link-exact-active {
+  color: var(--med-teal);
+}
+
+/* Person color chips. */
+.chip-rowan { background: var(--rowan-bg); color: var(--rowan-text); }
+.chip-jamie { background: var(--jamie-bg); color: var(--jamie-text); }
+.chip-samen { background: var(--samen-bg); color: var(--samen-text); }
+
+/* Buttons & inputs. */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+}
+.btn {
+  padding: 12px 16px;
+  background: var(--med-teal);
+  color: #fff;
+  font-size: 15px;
+}
+.btn-secondary {
+  background: var(--light-teal);
+  color: var(--dark-text);
+}
+.btn-block { width: 100%; }
+.btn:disabled { opacity: 0.5; }
+
+input[type='text'],
+input[type='password'],
+input[type='date'],
+select {
+  font-family: inherit;
+  font-size: 15px;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--dark-text);
+  width: 100%;
+}
+
+.row { display: flex; gap: 8px; align-items: center; }
+.muted { color: var(--light-text); font-size: 13px; }
+.progress-track {
+  height: 8px;
+  background: var(--light-teal);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--green);
+  transition: width 0.3s ease;
+}
+
+/* Checklist item. */
+.task {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 4px;
+  border-bottom: 1px solid var(--border);
+}
+.task:last-child { border-bottom: none; }
+.task .check {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #fff;
+  flex-shrink: 0;
+}
+.task.done .check { background: var(--green); border-color: var(--green); }
+.task.done .label { text-decoration: line-through; color: var(--light-text); }
+
+.week-select { margin-bottom: 12px; }
+
+.toast {
+  position: fixed;
+  bottom: calc(84px + var(--safe-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--dark-teal);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  z-index: 50;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
